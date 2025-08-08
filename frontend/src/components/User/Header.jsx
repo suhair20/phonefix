@@ -1,7 +1,7 @@
 
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-
+import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import React from 'react'
 import { UserIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
@@ -87,24 +87,65 @@ function Header() {
 
       {/* Mobile nav menu */}
      
-        <div className={`fixed top-0 left-0 w-64 h-full rounded bg-white text-black z-40 transform transition-transform duration-500 ease-in-out ${
+        <div className={`fixed top-0 left-0 w-64  rounded bg-white text-black z-40 transform transition-transform duration-500 ease-in-out ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
 
-             <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="text-lg font-bold">Menu</h2>
+             <div className="flex justify-center  items-center p-4 border-b">
+          <h2 className="text-lg text-center font-bold">Menu</h2>
+          
           <XMarkIcon
-            className="h-6 w-6 cursor-pointer"
+           className="h-6 w-6 cursor-pointer absolute right-4"
             onClick={() => setMenuOpen(false)}
           />
+         
         </div>
-          <p className="hover:text-black">Men Watches</p>
-          <p className="hover:text-black">Head phone</p>
-          <p className="hover:text-black">Ear pode</p>
-          <p className="hover:text-black">Girl Watches</p>
-          <p className="hover:text-black">Magazine</p>
-          <p className="hover:text-black">Accessories</p>
-          <p className="hover:text-black">Contact</p>
+        <div className="flex-col  text-lg font-playball items-center p-4  border-b">
+          <Link to={'/shop'} >
+          <div className='flex justify-between'>
+   <p className="hover:text-blue-600 p-2  ">Men Watches</p>
+         <ChevronRightIcon className="w-7 " />
+          </div>
+     
+        </Link>
+         <Link to={'/shop'} >
+         <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2 ">Head phone</p>
+        <ChevronRightIcon className="w-7 " />
+        </div>
+        
+        </Link>
+         <Link to={'/shop'} >
+         <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2 ">Ear pode</p>
+        <ChevronRightIcon className="w-7 " />
+        </div>
+        </Link>
+         <Link to={'/shop'} >
+         <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2">Girl Watches</p>
+        <ChevronRightIcon className="w-7 " />
+        </div>
+        </Link>
+         <Link to={'/shop'} >
+         <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2 ">Magazine</p>
+      
+        </div>
+        </Link>
+         <Link to={'/shop'} >
+         <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2 ">Accessories</p>
+       
+        </div>
+        </Link>
+         <Link to={'/shop'} >
+         <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2">Contact</p>
+        
+        </div>
+        </Link>
+        </div>
         </div>
       
     </div>
