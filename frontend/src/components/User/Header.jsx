@@ -26,7 +26,7 @@ function Header() {
       {/* Top bar */}
       <div className="flex items-center justify-between">
         {/* Logo - centered on mobile */}
-        <h1 className="text-3xl md:text-5xl w-full md:w-max items-center flex justify-center  font-serif font-extrabold">Phonefix</h1>
+        <h1 className="text-2xl md:text-5xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Phonefix</h1>
 
        <div className="relative w-[600px] hidden md:flex">
   <MagnifyingGlassIcon className="w-5 h-5 text-gray-800 absolute left-3 top-3" />

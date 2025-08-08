@@ -23,7 +23,7 @@ function UserProductScreen() {
       <Header/>
        
 <div className=' h-screen bg-[#fefffdd8] '>
-    <div  className='lg:px-40 px-2  sm:px-28  '>
+    <div  className='lg:px-40 px-6  sm:px-28  '>
       <div className='  h-[500px]  rounded ' >
        <div>
        
@@ -46,9 +46,9 @@ function UserProductScreen() {
  
 
 <div className="w-full overflow-x-auto  items-center justify-center flex   touch-auto hide-scrollbar">
-  <div className="grid lg:grid-cols-5 grid-cols-3  w-max md:gap-6 gap-3 mb-16 ">
+  <div className="grid lg:grid-cols-5 grid-cols-2  w-max md:gap-6 gap-8 mb-16 ">
    
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
   </div>
@@ -67,7 +67,7 @@ function UserProductScreen() {
 
 
       
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
          <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -91,7 +91,7 @@ function UserProductScreen() {
 
 
        
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -113,7 +113,7 @@ function UserProductScreen() {
 </div>
 
         
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -135,7 +135,7 @@ function UserProductScreen() {
 </div>
 
        
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -159,7 +159,7 @@ function UserProductScreen() {
 
 
 
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -183,7 +183,7 @@ function UserProductScreen() {
 
 
 
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -207,7 +207,7 @@ function UserProductScreen() {
 
 
 
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -231,7 +231,7 @@ function UserProductScreen() {
 
 
 
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
@@ -254,7 +254,7 @@ function UserProductScreen() {
 
 
 
-        <div className="md:h-80 h-56 rounded w-28 md:w-56 bg-gray-200 flex flex-col justify-between">
+        <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
            <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
