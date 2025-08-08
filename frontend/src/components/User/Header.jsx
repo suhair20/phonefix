@@ -41,8 +41,9 @@ function Header() {
 
         {/* Right section */}
         <div className=" flex items-center justify-center space-x-2">
-          
+          <Link to={'/login'} >
           <UserIcon className="h-6 w-6 text-black" />
+          </Link>
           <Link to={'/login'}>
           <button className="hidden md:flex hover:text-gray-600">Login / Register</button>
           </Link>
