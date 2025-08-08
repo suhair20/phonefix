@@ -23,7 +23,7 @@ function Header() {
    <p>Have you tried  the Phonefix app ? Discover now! </p>
 </div>
   <div className="bg-[#fefffdd8] px-4 sm:px-20 lg:px-40 md:pt-5 pt-2">
-      {/* Top bar */}
+     
       <div className="flex items-center justify-between">
         {/* Logo - centered on mobile */}
         <h1 className="text-2xl md:text-5xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Phonefix</h1>
