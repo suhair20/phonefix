@@ -49,9 +49,11 @@ function UserProductScreen() {
   <div className="grid lg:grid-cols-5 grid-cols-2  w-max md:gap-6 gap-8 mb-16 ">
    
         <div className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100  border-2 flex flex-col justify-between">
+  <Link to={'/product'} >  
   <div className="flex justify-center pt-5">
     <img src={image2} alt="Product" className="w-24 md:w-48 h-auto object-contain" />
   </div>
+  </Link> 
 
   <div className="px-3 pt-2 ">
     <p className="font-semibold">Roiex</p>
@@ -59,9 +61,11 @@ function UserProductScreen() {
   </div>
 
   <div className="px-3 pb-3">
+   <Link  to={'/Cart'} >
     <button className="w-full h-10 text-sm font-medium text-white bg-blue-950 border border-black rounded-lg hover:bg-blue-900">
       Add to Cart
     </button>
+    </Link>
   </div>
 </div>
 

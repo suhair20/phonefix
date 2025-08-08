@@ -26,7 +26,8 @@ function Header() {
      
       <div className="flex items-center justify-between">
         {/* Logo - centered on mobile */}
-        <h1 className="text-2xl md:text-5xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Phonefix</h1>
+        
+        <h1 className="text-3xl md:text-5xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Phonefix</h1>
 
        <div className="relative w-[600px] hidden md:flex">
   <MagnifyingGlassIcon className="w-5 h-5 text-gray-800 absolute left-3 top-3" />
@@ -63,6 +64,9 @@ function Header() {
 
       {/* Nav links */}
       <div className="hidden lg:flex space-x-20 pt-6 pb-2 gap-9 font-normal text-[15px] cursor-pointer text-gray-900 items-center justify-center">
+         <Link to={'/'} >
+        <p className="hover:text-blue-600">Home</p>
+        </Link>
         <Link to={'/shop'} >
         <p className="hover:text-blue-600">Men Watches</p>
         </Link>
@@ -75,9 +79,7 @@ function Header() {
          <Link to={'/shop'} >
         <p className="hover:text-blue-600">Girl Watches</p>
         </Link>
-         <Link to={'/shop'} >
-        <p className="hover:text-blue-600">Magazine</p>
-        </Link>
+        
          <Link to={'/shop'} >
         <p className="hover:text-blue-600">Accessories</p>
         </Link>
@@ -102,6 +104,12 @@ function Header() {
          
         </div>
         <div className="flex-col  text-lg font-playball items-center p-4  border-b">
+        <Link to={'/'} >
+            <div className='flex justify-between'>
+        <p className="hover:text-blue-600 p-2 ">Home</p>
+      
+        </div>
+        </Link>
           <Link to={'/shop'} >
           <div className='flex justify-between'>
    <p className="hover:text-blue-600 p-2  ">Men Watches</p>
@@ -129,10 +137,7 @@ function Header() {
         </div>
         </Link>
          <Link to={'/shop'} >
-         <div className='flex justify-between'>
-        <p className="hover:text-blue-600 p-2 ">Magazine</p>
-      
-        </div>
+       
         </Link>
          <Link to={'/shop'} >
          <div className='flex justify-between'>

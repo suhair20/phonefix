@@ -47,23 +47,19 @@ function ShowProduct() {
       <p className="text-3xl font-bold text-black my-4">$9,600</p>
 
       {/* Payment Icons */}
-      <div className="flex items-center gap-2 mb-4">
-        <img src="/visa.png" alt="Visa" className="h-6" />
-        <img src="/mastercard.png" alt="MasterCard" className="h-6" />
-        <img src="/amex.png" alt="Amex" className="h-6" />
-      </div>
+      
 
       {/* Action Buttons */}
       <div className="flex gap-3 mb-6">
         <Link  to={'/Cart'} >
         <button className="bg-blue-950 text-white py-2 px-6 rounded hover:bg-blue-900">Add to Cart</button>
         </Link>
-        <button className="border border-blue-950 text-blue-950 py-2 px-6 rounded hover:bg-gray-100">Suggest a Price</button>
+      
       </div>
 
       {/* Security Box */}
       <div className="border p-4 rounded-md bg-gray-50 text-sm">
-        <p className="font-semibold mb-2">Security on Chrono24</p>
+        <p className="font-semibold mb-2">Security on ponefix</p>
         <ul className="list-disc list-inside text-gray-700 space-y-1">
           <li>Payment via Escrow Service</li>
           <li>Ownership confirmed</li>

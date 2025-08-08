@@ -18,8 +18,8 @@ function Checkout() {
   return (
     <div>
         <Header/>
-        <div className="h-1 w-full bg-blue-950 mx-auto"></div>
-    <div className="max-w-7xl mx-auto   p-6 md:mt-20 grid md:grid-cols-2 gap-14">
+        
+    <div className="max-w-7xl mx-auto   p-6 md:mt-7    mb-20 grid md:grid-cols-2 gap-14">
       {/* Left: User Info */}
       <div>
         <h2 className="text-2xl font-bold mb-4">Shipping Details</h2>
