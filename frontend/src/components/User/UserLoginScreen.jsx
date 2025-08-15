@@ -1,19 +1,23 @@
 import React from 'react'
+import { useState } from "react";
 import { Link } from 'react-router-dom'
 
 function UserLoginScreen() {
+   const [showPassword, setShowPassword] = useState(false);
   return (
-   <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
-      <h1 className="text-center text-3xl font-bold text-blue-950 mb-6 tracking-wider">Phonefix</h1>
+   <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6">
+     
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-6">
+         <h1 className="text-center text-3xl font-bold text-blue-950 p-4 mb-6 tracking-wider">Phonefix</h1>
         {/* Logo */}
       
 
         {/* Login Title */}
-        <h2 className="text-3xl font-normal mb-4 text-black w-fit px-4 py-1 rounded">Log in</h2>
+       
 
         {/* Form */}
-        <form className="space-y-4">
+        <form className="space-y-4 ">
+          <div className='grid grid-cols-2 gap-2' >
           <div>
             <label className="block text-sm font-medium text-gray-700">Email address</label>
             <input
@@ -25,16 +29,20 @@ function UserLoginScreen() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">Password</label>
-            <div className="relative">
+             <div className="relative">
               <input
-                type="password"
-                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring focus:border-blue-400"
+                type={showPassword ? "text" : "password"}
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
                 placeholder="••••••••"
               />
-              <span className="absolute right-3 top-3 text-gray-400 cursor-pointer">
-                👁️
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-2.5 right-3 cursor-pointer text-gray-400"
+              >
+                👁
               </span>
             </div>
+          </div>
           </div>
 
           <div className="flex justify-between items-center text-sm">
