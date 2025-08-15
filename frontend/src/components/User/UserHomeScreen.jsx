@@ -203,7 +203,7 @@ function UserHomeScreen() {
    <div className='pt-4 md:pt-10 px-4 md:px-36 h-auto'>
   <h1 className='text-3xl font-normal p-4 md:p-10'>POPULAR BRAND</h1>
 
-  {/* Horizontal Scroll Container for Small Screens */}
+  {/* Horizontal Scroll Container for Small Screens */}//
   <div className='flex flex-col gap-4'>
 
     {/* Wrap inside overflow container */}
