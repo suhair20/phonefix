@@ -59,6 +59,7 @@ function UserHomeScreen() {
            <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
            Limited to 50 pieces
            </div>
+            <Link to={'/product'} >  
          <div className="mt-12 flex items-center justify-center">
         <img
          src={image3}
@@ -66,6 +67,7 @@ function UserHomeScreen() {
            className="md:w-44 w-24   group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
         />
      </div>
+     </Link>
            <div className="absolute mt-4  ">
     <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-CUBK</p>
     <p className="text-xs md:text-sm font-semibold">SPACE TIMER JUPITER GOLD</p>
@@ -88,6 +90,7 @@ function UserHomeScreen() {
   </div>
 
   {/* Watch image with angle */}
+   <Link to={'/product'} >  
   <div className="mt-12 flex items-center justify-center">
     <img
       src={image2}
@@ -95,6 +98,7 @@ function UserHomeScreen() {
       className="md:w-44 w-24 rotate-[35deg] scale-110   group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
     />
   </div>
+  </Link>
 
   {/* Text content */}
   <div className="absolute mt-4 ">
@@ -113,6 +117,7 @@ function UserHomeScreen() {
            <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
            Limited to 25 pieces
            </div>
+            <Link to={'/product'} >  
          <div className="mt-12 flex items-center justify-center">
         <img
          src={image4}
@@ -120,6 +125,7 @@ function UserHomeScreen() {
            className="md:w-44 w-24 rotate-[35deg] scale-110  group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
         />
      </div>
+     </Link>
            <div className="absolute mt-4 ">
     <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-9UBK</p>
     <p className="text-xs md:text-sm font-semibold">KDM AirPod</p>
@@ -136,6 +142,7 @@ function UserHomeScreen() {
            <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
            Limited to 37 pieces
            </div>
+            <Link to={'/product'} >  
          <div className="mt-12 flex items-center justify-center">
         <img
          src={image5}
@@ -143,6 +150,7 @@ function UserHomeScreen() {
            className="md:w-44 w-24 rotate-[35deg] scale-110   group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
         />
      </div>
+     </Link>
            <div className="absolute mt-4 ">
     <p className="text-xs text-gray-400 tracking-wider">CH-99941.2-CUBK</p>
     <p className="text-xs md:text-sm font-semibold">AirPods pro</p>
@@ -161,6 +169,7 @@ function UserHomeScreen() {
            <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
            Limited to 58 pieces
            </div>
+            <Link to={'/product'} >  
          <div className="mt-12 flex items-center justify-center">
         <img
          src={image2}
@@ -168,6 +177,7 @@ function UserHomeScreen() {
            className="md:w-44 w-24 rotate-[35deg] scale-110  group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
         />
      </div>
+     </Link>
            <div className="absolute mt-4 ">
     <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-CUBK</p>
     <p className="text-xs md:text-sm font-semibold">SPACE TIMER JUPITER GOLD</p>
