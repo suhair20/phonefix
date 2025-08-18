@@ -7,15 +7,15 @@ function UserRegister() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-        <h1 className="text-3xl font-extrabold text-center text-blue-950 tracking-wide mb-8">
-          PHONEFIX
-        </h1>
+        
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow border">
         {/* Logo */}
        
 
         {/* Title */}
-        <h2 className="text-3xl font-bold mb-4">Create Account</h2>
+        <h1 className="text-3xl font-extrabold text-center text-blue-950 tracking-wide mb-8">
+          PHONEFIX
+        </h1>
 
         {/* Form */}
         <form className="space-y-4">
@@ -95,7 +95,7 @@ function UserRegister() {
          <p className="text-center text-sm mt-6">
 
           Alredy have an Acount ?
-          <Link to={'/Register'} >
+          <Link to={'/login'} >
            <a href="#" className="text-blue-600 hover:underline">Log in Now</a>
            </Link>
         </p>

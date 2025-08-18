@@ -25,9 +25,9 @@ function Header() {
   <div className="bg-[#fefffdd8] px-4 sm:px-20 lg:px-40 md:pt-5 pt-2">
      
       <div className="flex items-center justify-between">
-        {/* Logo - centered on mobile */}
+     
         
-        <h1 className="text-3xl md:text-5xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Phonefix</h1>
+        <h1 className="text-3xl md:text-4xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Trendif</h1>
 
        <div className="relative w-[600px] hidden md:flex">
   <MagnifyingGlassIcon className="w-5 h-5 text-gray-800 absolute left-3 top-3" />
