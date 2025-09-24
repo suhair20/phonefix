@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom'; 
 
+
 function Header() {
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -27,7 +28,7 @@ function Header() {
       <div className="flex items-center justify-between">
      
         
-        <h1 className="text-3xl md:text-4xl w-full ml-6 md:ml-0 md:w-max items-center flex justify-center  font-serif font-extrabold">Trendif</h1>
+        <h1 className="text-3xl md:text-4xl w-full ml-6 md:ml-0 md:w-max  items-center flex justify-center  font-serif font-extrabold">LObUY</h1>
 
        <div className="relative w-[600px] hidden md:flex">
   <MagnifyingGlassIcon className="w-5 h-5 text-gray-800 absolute left-3 top-3" />

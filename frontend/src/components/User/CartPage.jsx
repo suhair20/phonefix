@@ -1,4 +1,4 @@
-import React from 'react'
+  import React from 'react'
 import { useState } from 'react';
 import CartItem from './Cartitem';
 import image2 from '../../assets/watch.png';
