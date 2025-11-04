@@ -11,17 +11,34 @@ export const userSlice= createApi({
     reducerPath:"userapi",
     baseQuery,
     endpoints:(builder)=>({
+
+
+
         signup:builder.mutation({
             query:(data)=>({
                 url:'/api/user/register',
                 method:'POST',
                 body:data
             })
+        }),
+
+
+
+        verifyOtp:builder.mutation({
+            query:(data)=>({
+                url:'/api/user/verifyotp',
+                method:'POST',
+                body:data
+            })
         })
+
+
+
     })
     
 })
 
 export const {
-    useSignupMutation
+    useSignupMutation,
+    useVerifyOtpMutation,
 }=userSlice

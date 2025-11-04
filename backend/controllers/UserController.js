@@ -1,40 +1,77 @@
-// import User from '../models/userModel.js';
-// import bcrypt from 'bcryptjs';  // optional if you want to hash passwords
 
-// Securely hash password (optional but recommended)
-// const securePassword = async (password) => {
-//   const hash = await bcrypt.hash(password, 10);
-//   return hash;
-// };
+import bcrypt from 'bcrypt'
 
-// Registration controller
+import { otpService } from '../Services/otpService.js';
+import User from '../models/userModel.js';
+
+ 
 export const registration = async (req, res) => {
   try {
-    console.log("come regitration");
+    const { email, Password } = req.body;
+
+    const existing = await User.findOne({ email });
+
     
-    const { name, email, password } = req.body;
+    if (existing) {
+      
+      if (!existing.isVerified) {
+        await otpService.sendOtp(email);
+        return res.status(200).json({ success: true, message: "OTP resent" });
+      }
 
-    // Hash password before saving
-    // const hashedPassword = await securePassword(password);
+   
+      return res.status(400).json({ success: false, message: "User already exists" });
+    }
 
-    // // Create new user
-    // const newUser = new User({
-    //   name,
-    //   email,
-    //   password: hashedPassword
-    // });
+    
+    const hashedPassword = await bcrypt.hash(Password, 10);
 
-    // await newUser.save();
+  
+    const newUser = new User({
+      email,
+      Password: hashedPassword,
+      isVerified: false,
+    });
+
+    await newUser.save();
+
+    
+    await otpService.sendOtp(email);
 
     res.status(201).json({
-      message: 'User registered successfully',
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email
-      }
+      success: true,
+      message: "User created, OTP sent",
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+
+  export const verifyotp =async (req,res)=>{
+  try {
+    console.log("vaniii");
+    
+
+    const { email, otp } = req.body;
+
+    console.log("📩 Verify OTP route hit", req.body);
+
+      const isValid = await otpService.verifyOtp(email, otp);
+      if (!isValid)
+        return res.status(400).json({ success: false, message: "Invalid or expired OTP" });
+
+ 
+    await User.updateOne({ email }, { $set: { isVerified: true } });
+
+    res.status(200).json({ success: true, message: "User verified successfully" });
+
+
+  
+ } catch (error) {
+  console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+ }
+
+}

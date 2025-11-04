@@ -2,6 +2,9 @@ import React from 'react'
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import { useSignupMutation } from '../../../slices/userSlice';
+import OtpModal from './otpModal';
+import './user.css'
+
 function UserRegister() {
 
 
@@ -9,10 +12,10 @@ function UserRegister() {
     const [error, setError] = useState('')
     const [Password,setPassword]=useState('')
     const [email,setemail]=useState('')
+ const [showOtp, setShowOtp] = useState(false);
 
 
-
-    const [ signup,{isloading:isignuploading}]=useSignupMutation()
+    const [ signup,{isLoading:isSignupLoading}]=useSignupMutation()
 
    const validateForm = ( email, password, ) => {
    
@@ -50,17 +53,32 @@ function UserRegister() {
     e.preventDefault();
 
    try {
+    console.log("uploading:", isSignupLoading);
     
    const isvalid=validateForm(email,Password)
       if(isvalid){
         console.log(email,Password);
         
-        const response= await  signup({email,Password})
+        const response= await  signup({email,Password}).unwrap();
+        console.log(response);
+        
+       if (response.success) {
+        console.log("respinse sucess");
+        
+       
+        setShowOtp(true);
+      } else {
+        setError("Signup failed:", response.message);
+        console.log(response);
+        
+      }
+        
         
       }
 
    } catch (error) {
-    console.log(error);
+      console.log("Error response:", error);
+    setError(error?.data?.message || "Something went wrong");
     
    }
       
@@ -77,8 +95,8 @@ function UserRegister() {
        
 
         {/* Title */}
-        <h1 className="text-3xl font-extrabold text-center text-blue-950 tracking-wide mb-8">
-          PHONEFIX
+        <h1 className="text-3xl font-serif text-center text-blue-950 tracking-wide mb-8">
+       LOBUY
         </h1>
 
         {/* Form */}
@@ -131,11 +149,19 @@ function UserRegister() {
           <button
             type="submit"
             className="w-full bg-blue-950 text-white font-semibold py-2 rounded hover:bg-blue-900"
+            disabled={isSignupLoading}
           >
-            Register for free
+            {isSignupLoading?(
+              <span className='loader p-2'>
+
+              </span>
+            ):(
+                  'Register for free'
+            )}
+          
           </button>
         </form>
-
+ {showOtp && <OtpModal email={email}  onSuccess={(user) => console.log(user)} />}
         {/* OR Divider */}
         <div className="flex items-center my-6">
           <hr className="flex-grow border-t" />
