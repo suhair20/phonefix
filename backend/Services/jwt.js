@@ -24,4 +24,4 @@ class Jwt{
         }
     }
 }
-export default Jwt
+export default  new Jwt

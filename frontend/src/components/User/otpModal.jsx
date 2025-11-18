@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useVerifyOtpMutation } from "../../../slices/userSlice";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { setauthenticated } from "../../../slices/AuthSlice";
 
 const otpModal = ({ email,  onClose }) => {
 
-
+const dispatch=useDispatch();
 
   const [otp, setOtp] =useState("");
   
@@ -18,7 +19,17 @@ const otpModal = ({ email,  onClose }) => {
     try {
       const res = await verifyOtp({ email,  otp }).unwrap();
       console.log("OTP verified:", res);
-    
+
+     const data= await res.json();
+      
+     if(data.sucess){
+      localStorage.setItem('token',data.token);
+      
+      dispatch(setauthenticated(data.user))
+     }
+       
+
+
 
       
       navigate("/");

@@ -8,7 +8,7 @@ function UserLoginScreen() {
    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6">
      
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-6">
-         <h1 className="text-center text-3xl font-bold text-blue-950 p-4 mb-6 tracking-wider">Phonefix</h1>
+         <h1 className="text-center text-3xl font-bold text-blue-950 p-4 mb-6 tracking-wider">Lobuy</h1>
         {/* Logo */}
       
 

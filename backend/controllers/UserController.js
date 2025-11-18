@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 
 import { otpService } from '../Services/otpService.js';
 import User from '../models/userModel.js';
+import Jwt from '../Services/jwt.js';
 
  
 export const registration = async (req, res) => {
@@ -65,7 +66,17 @@ export const registration = async (req, res) => {
  
     await User.updateOne({ email }, { $set: { isVerified: true } });
 
-    res.status(200).json({ success: true, message: "User verified successfully" });
+   const token = jwtToken.generateToken({
+      id: User._id,
+      email: User.email,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+      user,
+      token,
+    });
 
 
   

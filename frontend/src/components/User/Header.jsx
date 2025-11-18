@@ -7,11 +7,15 @@ import { UserIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom'; 
+import { useSelector } from "react-redux";
+import { ShoppingCart } from "lucide-react";
+
 
 
 function Header() {
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const {isAuthenticated}=useSelector((state)=>state.auth)
   return (
     <div>
      
@@ -41,8 +45,13 @@ function Header() {
   />
 </div>
 
-        {/* Right section */}
-        <div className=" flex items-center justify-center space-x-2">
+        {isAuthenticated?(
+            <button className="flex items-center space-x-2">
+      <ShoppingCart className="h-6 w-6 text-black" />
+      <span>Cart</span>
+    </button>
+        ):(
+           <div className=" flex items-center justify-center space-x-2">
           <Link to={'/login'} >
           <UserIcon className="h-6 w-6 text-black" />
           </Link>
@@ -50,6 +59,10 @@ function Header() {
           <button className="hidden md:flex hover:text-gray-600">Login / Register</button>
           </Link>
         </div>
+        )}
+
+        {/* Right section */}
+       
 
         {/* Mobile menu icon (three bars) */}
         <div className="lg:hidden absolute  ">
