@@ -14,30 +14,26 @@ const dispatch=useDispatch();
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
     const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await verifyOtp({ email,  otp }).unwrap();
-      console.log("OTP verified:", res);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-     const data= await res.json();
-      
-     if(data.sucess){
-      localStorage.setItem('token',data.token);
-      
-      dispatch(setauthenticated(data.user))
-     }
-       
+  try {
+    const data = await verifyOtp({ email, otp }).unwrap();
+    console.log("OTP verified:", data);
 
-
-
-      
+    if (data.success) {
+      localStorage.setItem("token", data.token);
+      dispatch(setauthenticated(data.user));
       navigate("/");
-    } catch (err) {
-      console.error("OTP error:", err);
-      setError(err.data?.message || "Invalid OTP");
+    } else {
+      setError("Invalid OTP");
     }
-  };
+
+  } catch (err) {
+    console.error("OTP error:", err);
+    setError(err?.data?.message || "Invalid OTP");
+  }
+};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

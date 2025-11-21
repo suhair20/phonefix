@@ -6,6 +6,7 @@ import UserLoginScreen from "../components/User/UserLoginScreen";
 import UserRegister from "../components/User/UserRegister";
 import CartPage from "../components/User/CartPage";
 import Checkout from "../components/User/Checkout";
+import Profile from "../components/User/Profile";
 const UserRoutes=(
     <>
   <Route path="/" element={<UserHomeScreen/>}/>
@@ -15,6 +16,7 @@ const UserRoutes=(
   <Route path="/Register" element={<UserRegister/>} />
   <Route path="/Cart" element={<CartPage/>} />
   <Route path="/Checkout" element={<Checkout/>} />
+  <Route path="/profile" element={<Profile/>}/>
 </>
 
 )

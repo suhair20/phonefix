@@ -11,6 +11,7 @@ export const checkAuthOnLoad = (dispatch) => {
     const currentTime = Date.now() / 1000;
 
     if (decoded.exp > currentTime) {
+     console.log("welcome",decoded.exp,currentTime);
      
       dispatch(setauthenticated(decoded));
     } else {

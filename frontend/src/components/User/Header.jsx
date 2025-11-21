@@ -9,6 +9,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom'; 
 import { useSelector } from "react-redux";
 import { ShoppingCart } from "lucide-react";
+import { User,  } from "lucide-react";
 
 
 
@@ -46,10 +47,23 @@ function Header() {
 </div>
 
         {isAuthenticated?(
+<div className='gap-4 flex'  >
+  <Link to={'/profile'} >
+           <button className="flex items-center gap-2 text-black hover:text-gray-700">
+      <User className="w-5 h-5" />
+      <span className="text-sm font-medium hidden lg:inline">Account</span>
+     
+    </button>
+    </Link>
+
+
+
             <button className="flex items-center space-x-2">
       <ShoppingCart className="h-6 w-6 text-black" />
-      <span>Cart</span>
+      <span className="text-sm font-medium hidden lg:inline" >Cart</span>
     </button>
+
+    </div>
         ):(
            <div className=" flex items-center justify-center space-x-2">
           <Link to={'/login'} >

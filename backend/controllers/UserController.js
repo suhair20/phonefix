@@ -49,40 +49,43 @@ export const registration = async (req, res) => {
   }
 };
 
-
-  export const verifyotp =async (req,res)=>{
+export const verifyotp = async (req, res) => {
   try {
-    console.log("vaniii");
-    
+    console.log("Verify OTP route hit");
 
     const { email, otp } = req.body;
+    console.log("📩 Incoming:", req.body);
 
-    console.log("📩 Verify OTP route hit", req.body);
+    const isValid = await otpService.verifyOtp(email, otp);
 
-      const isValid = await otpService.verifyOtp(email, otp);
-      if (!isValid)
-        return res.status(400).json({ success: false, message: "Invalid or expired OTP" });
+    if (!isValid) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired OTP" });
+    }
 
- 
+    // Update verification status
     await User.updateOne({ email }, { $set: { isVerified: true } });
 
-   const token = jwtToken.generateToken({
-      id: User._id,
-      email: User.email,
+    // Get the user to generate token correctly
+    const user = await User.findOne({ email });
+
+    const token =  Jwt.genrateToken({
+      id: user._id,
+      email: user.email,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "OTP verified successfully",
-      user,
       token,
+      user,
     });
 
-
-  
- } catch (error) {
-  console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
- }
-
-}
+  } catch (error) {
+    console.error("OTP Verify Error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
+  }
+};
