@@ -1,28 +1,28 @@
 import React from 'react'
 import Header from './Header'
+import { useState } from 'react';
+import Personalinformation from './Personalinformation';
+import ManageAddress from './ManageAddress';
 
-import {ShoppingBag,Heart,Ticket,HelpCircle} from "lucide-react"
+import {User,ShoppingBag,Heart,Ticket,HelpCircle,Package,LogOut} from "lucide-react"
 
 function Profile() {
+
+
+  const [activeMenu, setActiveMenu] = useState("profile");
   return (
     <>
     <Header/>
-    <div className='  ' >
+    <div className=' shadow-md  bg-gray-400  ' >
    
 
-  <div className="fixed  px-28 left-0 w-full p-4 h-full bg-slate-100 z-50 overflow-y-auto animate-slideDown">
+  <div className="fixed px-32    items-center justify-center left-0 w-full p-4 h-full bg-slate-100 z-50 overflow-y-auto animate-slideDown">
+
+    <div  className='  px-16  items-center justify-center   ' >
     
     {/* Header */}
-    <div className="flex items-center shadow-md bg-white w-48 rounded-md justify-between p-4 border-b">
-      <h2 className="text-lg font-semibold">My Account</h2>
-      
-    </div>
+    
 
-    {/* User Info */}
-    <div className="p-4   border-b shadow-md inline-block ">
-      <p className="font-medium w-full ">moidheesuhair@gmail.com </p>
-     
-    </div>
 
     {/* Menu Items */}
     <div className="p-4 flex items-center justify-center  gap-20">
@@ -48,7 +48,86 @@ function Profile() {
       </button>
 
     </div>
+       <div className="w-full flex border min-h-screen">
 
+      {/* LEFT SIDEBAR */}
+      <div className="w-72 border ">
+
+       
+
+        {/* My Orders */}
+       
+
+        {/* Account Settings */}
+        <div className="px-4 mt-4">
+          <div className="flex items-center gap-2 text-gray-600 font-semibold mb-3">
+            <User className="text-blue-600" size={18} />
+            ACCOUNT SETTINGS
+          </div>
+
+          <ul className="space-y-1">
+           <li
+  onClick={() => setActiveMenu("profile")}
+  className={`py-2 px-3 cursor-pointer ${
+    activeMenu === "profile" ? "bg-blue-50 text-blue-600" : "text-gray-700"
+  }`}
+>
+  Profile Information
+</li>
+
+           <li
+  onClick={() => setActiveMenu("address")}
+  className={`py-2 px-3 cursor-pointer ${
+    activeMenu === "address" ? "bg-blue-50 text-blue-600" : "text-gray-700"
+  }`}
+>
+  Manage Addresses
+</li>
+
+            <li className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+            
+            </li>
+          </ul>
+
+           <div className="flex border-r items-center gap-2 text-gray-600 font-semibold mb-3">
+            <ShoppingBag className="text-blue-600" size={18} />
+            MYOWN
+          </div>
+          <ul className="space-y-1">
+             <li className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+            All Notification
+            </li>
+
+           <li className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+            MY Review
+            </li>
+
+            <li className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+            MY Wishlist
+            </li>
+          </ul>
+           <div className="flex pt-4 border-t items-center gap-2 text-gray-600 font-semibold mb-3">
+            <LogOut className="text-blue-600" size={18} />
+            Logout
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT SIDE CONTENT */}
+     <div className="flex-1 p-10">
+
+  {activeMenu === "profile" && (
+    <Personalinformation />
+  )}
+
+  {activeMenu === "address" && (
+    <ManageAddress />
+  )}
+
+</div>
+    </div>
+</div>
+ 
   </div>
 
 
