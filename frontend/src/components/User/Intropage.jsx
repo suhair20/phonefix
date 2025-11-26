@@ -120,7 +120,7 @@ function CameraControl({ step }) {
     useFrame(() => {
         if (step === 1) {
             // Subtle zoom-in during sequence, targeting a slightly closer spot
-            camera.position.z = THREE.MathUtils.lerp(camera.position.z, 5.5, 0.03); 
+            camera.position.z = THREE.MathUtils.lerp(camera.position.z, 6.5, 0.03); 
             camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.05, 0.03); 
         } else {
             // Reset camera position 
@@ -150,9 +150,9 @@ export default function Intro3DSequence() {
   }, [navigate]);
 
   return (
-    <div className="w-full h-screen bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
+    <div className="w-full h-screen bg-gradient-to-tr  from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
         {/* 🚨 Updated Canvas camera position to Z=6 */}
-        <Canvas camera={{ position: [0, 0, 6], fov: 10 }}> 
+        <Canvas camera={{ position: [0, 0, 6], fov: 8 }}> 
             <ambientLight intensity={0.5} />
             {/* 🚨 Moved spotlight further back to compensate for camera distance */}
             <spotLight position={[40, 40, 40]} angle={0.8} penumbra={1} intensity={100} castShadow /> 
@@ -161,7 +161,7 @@ export default function Intro3DSequence() {
             <CameraControl step={step} />
 
             {/* ONLY SHOW THE HEADPHONES MODEL */}
-            <AnimatedModel file="headphoness.glb" visible={step === 1} />
+            <AnimatedModel  file="headphoness.glb" visible={step === 1} />
 
             {/* Studio-like environment for reflections */}
             <Environment resolution={32}>
@@ -172,9 +172,9 @@ export default function Intro3DSequence() {
         </Canvas>
 
         {/* Glowing LO BUY Text */}
-        <h1 className={`absolute text-5xl md:text-7xl font-extrabold text-white font-serif tracking-wide drop-shadow-[0_0_35px_#0ea5e9] transition-opacity duration-500`}
+        <h1 className={`absolute text-5xl md:text-6xl font-extrabold text-white font-serif tracking-wide drop-shadow-[0_0_35px_#0ea5e9] transition-opacity duration-500`}
             style={{
-                opacity: step === 1 ? 1 : 0
+                opacity: step === 1 ? 1 : 1
             }}
         >
               <h2 className="intro-3d  font-serif ">LOBUY</h2>
