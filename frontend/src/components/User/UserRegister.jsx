@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from 'react-router-dom';
 import { useSignupMutation } from '../../../slices/userSlice';
 import OtpModal from './otpModal';
-import './user.css'
+
 
 function UserRegister() {
 
