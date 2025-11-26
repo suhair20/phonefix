@@ -14,37 +14,36 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 
-// --- Model target size (Remains small) ---
+// -------------------------------------------
+// MODEL TARGET SIZES (Controls final size)
+// -------------------------------------------
 const modelTargetSizes = {
   headphones: 2.0, 
 };
 
-// --- Helper Functions (No Change) ---
-
+// -------------------------------------------
+// OPACITY HELPER
+// -------------------------------------------
 function setModelOpacity(object, opacity) {
   object.traverse((child) => {
     if (child.isMesh) {
-      const material = Array.isArray(child.material)
-        ? child.material
-        : [child.material];
-
-      material.forEach((mat) => {
-        if (mat) {
-          mat.transparent = true;
-          mat.opacity = opacity;
-          mat.needsUpdate = true;
-        }
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      mats.forEach((mat) => {
+        mat.transparent = true;
+        mat.opacity = opacity;
+        mat.needsUpdate = true;
       });
     }
   });
 }
 
-// --- AnimatedModel Component (No Change) ---
-
+// -------------------------------------------
+// HEADPHONE MODEL WITH SMOOTH COMING FORWARD
+// -------------------------------------------
 function AnimatedModel({ file, visible }) {
   const gltf = useGLTF(`/models/${file}`);
   const ref = useRef();
-  
+
   useEffect(() => {
     if (gltf.scene) {
       const box = new THREE.Box3().setFromObject(gltf.scene);
@@ -52,14 +51,15 @@ function AnimatedModel({ file, visible }) {
       box.getSize(size);
 
       const maxSize = Math.max(size.x, size.y, size.z);
-
       const targetSize = modelTargetSizes[file.split(".")[0]] || 1;
       const scale = targetSize / maxSize;
 
       gltf.scene.scale.set(scale, scale, scale);
-      
-      ref.current.position.z = 2; 
-      setModelOpacity(gltf.scene, 0); 
+
+      // Start far away
+      ref.current.position.z = 4;
+
+      setModelOpacity(gltf.scene, 0);
     }
   }, [gltf, file]);
 
@@ -67,39 +67,34 @@ function AnimatedModel({ file, visible }) {
     const t = state.clock.getElapsedTime();
 
     if (ref.current && gltf.scene) {
-      
-      let targetOpacity;
-      let lerpRate;
+      // Smooth easing opacity
+      const targetOpacity = visible ? 1 : 0;
+      const lerpRate = visible ? 0.2 : 0.1;
 
-      if (visible) {
-        targetOpacity = 1;
-        lerpRate = 0.3; 
-        
-        ref.current.rotation.y += 0.01; 
-        ref.current.rotation.x = 0; 
-        ref.current.position.y = Math.sin(t * 1.5) * 0.03; 
-        
-        // Z-position transition: bring model to center Z=0
-        ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, 0, 0.08); 
-        
-      } else {
-        targetOpacity = 0;
-        lerpRate = 0.1;
-
-        // Move the invisible model further away
-        ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, 2, 0.08); 
-      }
-      
       let currentOpacity = 0;
       gltf.scene.traverse((child) => {
-          if (child.isMesh && child.material) {
-              currentOpacity = Array.isArray(child.material) ? child.material[0].opacity : child.material.opacity;
-              return; 
-          }
+        if (child.isMesh && child.material) {
+          currentOpacity = Array.isArray(child.material)
+            ? child.material[0].opacity
+            : child.material.opacity;
+          return;
+        }
       });
-      
+
       const newOpacity = THREE.MathUtils.lerp(currentOpacity, targetOpacity, lerpRate);
       setModelOpacity(gltf.scene, newOpacity);
+
+      // ----------------------------------------
+      // SMOOTH COME FORWARD (EASE-IN)
+      // ----------------------------------------
+      const targetZ = visible ? 0 : 4;
+      ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, targetZ, 0.08);
+
+      // Small bounce movement
+      ref.current.position.y = Math.sin(t * 1.5) * 0.03;
+
+      // Rotation
+      if (visible) ref.current.rotation.y += 0.01;
     }
   });
 
@@ -110,75 +105,70 @@ function AnimatedModel({ file, visible }) {
   );
 }
 
-// --- Camera Control Component (Adjusted for longer Z distance) ---
-
+// -------------------------------------------
+// CAMERA CONTROLLER
+// -------------------------------------------
 function CameraControl({ step }) {
-    const { camera } = useThree();
-    // 🚨 New initial Z position
-    const initialCameraZ = 6; 
+  const { camera } = useThree();
 
-    useFrame(() => {
-        if (step === 1) {
-            // Subtle zoom-in during sequence, targeting a slightly closer spot
-            camera.position.z = THREE.MathUtils.lerp(camera.position.z, 6.5, 0.03); 
-            camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.05, 0.03); 
-        } else {
-            // Reset camera position 
-            camera.position.z = THREE.MathUtils.lerp(camera.position.z, initialCameraZ, 0.05);
-            camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.05);
-        }
-        camera.updateProjectionMatrix();
-    });
-    return null;
+  useFrame(() => {
+    const initialZ = 6;
+
+    if (step === 1) {
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 6.5, 0.03);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.05, 0.03);
+    } else {
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, initialZ, 0.05);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.05);
+    }
+
+    camera.updateProjectionMatrix();
+  });
+
+  return null;
 }
 
-// --- Main Intro Sequence Component (Updated Camera and Light) ---
-
+// -------------------------------------------
+// MAIN INTRO COMPONENT
+// -------------------------------------------
 export default function Intro3DSequence() {
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const timers = [];
-    
-    // 7 SECOND HEADPHONES-ONLY SEQUENCE TIMING
-    timers.push(setTimeout(() => setStep(1), 1000)); 
-    
-  
+
+    // Headphone starts after 1s
+    timers.push(setTimeout(() => setStep(1), 1000));
 
     return () => timers.forEach(clearTimeout);
-  }, [navigate]);
+  }, []);
 
   return (
-    <div className="w-full h-screen bg-gradient-to-tr  from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
-        {/* 🚨 Updated Canvas camera position to Z=6 */}
-        <Canvas camera={{ position: [0, 0, 6], fov: 8 }}> 
-            <ambientLight intensity={0.5} />
-            {/* 🚨 Moved spotlight further back to compensate for camera distance */}
-            <spotLight position={[40, 40, 40]} angle={0.8} penumbra={1} intensity={100} castShadow /> 
+    <div className="w-full h-screen bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
 
-            {/* Dynamic camera control */}
-            <CameraControl step={step} />
+      <Canvas camera={{ position: [0, 0, 6], fov: 8 }}>
+        <ambientLight intensity={0.6} />
+        <spotLight position={[40, 40, 40]} intensity={100} angle={0.8} />
 
-            {/* ONLY SHOW THE HEADPHONES MODEL */}
-            <AnimatedModel  file="headphoness.glb" visible={step === 1} />
+        <CameraControl step={step} />
 
-            {/* Studio-like environment for reflections */}
-            <Environment resolution={32}>
-                <Lightformer intensity={4} position={[5, 0, -5]} scale={[10, 10, 1]} target={[0, 0, 0]} />
-                <Lightformer intensity={4} position={[-5, 0, -5]} scale={[10, 10, 1]} target={[0, 0, 0]} />
-                <Lightformer intensity={10} position={[0, 5, 0]} scale={[10, 2, 1]} target={[0, 0, 0]} />
-            </Environment>
-        </Canvas>
+        {/* Headphones with smooth forward animation */}
+        <AnimatedModel file="headphoness.glb" visible={step === 1} />
 
-        {/* Glowing LO BUY Text */}
-        <h1 className={`absolute text-5xl md:text-6xl font-extrabold text-white font-serif tracking-wide drop-shadow-[0_0_35px_#0ea5e9] transition-opacity duration-500`}
-            style={{
-                opacity: step === 1 ? 1 : 1
-            }}
-        >
-              <h2 className="intro-3d  font-serif ">LOBUY</h2>
-        </h1>
+        <Environment resolution={32}>
+          <Lightformer intensity={4} position={[5, 0, -5]} scale={[10, 10, 1]} />
+          <Lightformer intensity={4} position={[-5, 0, -5]} scale={[10, 10, 1]} />
+          <Lightformer intensity={10} position={[0, 5, 0]} scale={[10, 2, 1]} />
+        </Environment>
+      </Canvas>
+
+      <h1
+        className="absolute text-5xl md:text-7xl font-extrabold text-white font-serif drop-shadow-[0_0_35px_#0ea5e9] transition-opacity duration-500"
+       
+      >
+        <h2 className="intro-3d font-serif">LOBUY</h2>
+      </h1>
     </div>
   );
 }
