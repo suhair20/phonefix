@@ -7,6 +7,8 @@ import UserRegister from "../components/User/UserRegister";
 import CartPage from "../components/User/CartPage";
 import Checkout from "../components/User/Checkout";
 import Profile from "../components/User/Profile";
+import Orders from "../components/User/Orders";
+import OrderDetials from "../components/User/OrderDetials";
 const UserRoutes=(
     <>
   <Route path="/" element={<UserHomeScreen/>}/>
@@ -17,6 +19,8 @@ const UserRoutes=(
   <Route path="/Cart" element={<CartPage/>} />
   <Route path="/Checkout" element={<Checkout/>} />
   <Route path="/profile" element={<Profile/>}/>
+  <Route path="/Orders" element={<Orders/>} />
+  <Route path="/Orderdetials" element={<OrderDetials/>} />
 </>
 
 )

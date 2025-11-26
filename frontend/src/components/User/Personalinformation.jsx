@@ -2,7 +2,7 @@ import React from 'react'
 
 function Personalinformation() {
   return (
-    <div className="flex-1 p-10">
+    <div className="flex-1 min-h-screen">
 
         {/* Personal Info Section */}
         <div className="max-w-3xl">

@@ -6,17 +6,25 @@ function ManageAddress() {
     const [activeMenu, setActiveMenu] = useState("profile");
   return (
     <div>
-      <div>
+      <div className='min-h-screen' >
       <h2 className="text-xl font-semibold mb-4">Manage Addresses</h2>
 
       <div onClick={()=>setActiveMenu("address")} className={`border p-4 rounded mb-5 flex items-center gap-2 text-blue-600 cursor-pointer `}>
         <span className="text-xl font-bold">+</span>
         ADD A NEW ADDRESS
       </div>
-       <div className="flex-1 p-10">
-
+       <div className="flex-1 ">
+      
   {activeMenu === "address" && (
+    <div>
+    <button 
+      onClick={()=>setActiveMenu("profile")}
+      className=" top-3 left-3 text-blue-600 hover:text-black text-xl"
+    >
+      ×
+    </button>
     <AddaddressComponent />
+    </div>
   )}
 
  

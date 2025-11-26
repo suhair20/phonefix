@@ -28,12 +28,12 @@ function Header() {
 <div className="w-full py-2 items-center text-[12px] font-normal justify-center flex bg-gradient-to-tr from-blue-950 to-black text-white" >
    <p>Have you tried  the Phonefix app ? Discover now! </p>
 </div>
-  <div className="bg-[#fefffdd8] px-4 sm:px-20 lg:px-40 md:pt-5 pt-2">
+  <div className="bg-[#fefffdd8] px-4 border-blue-950 shadow-xl  border-b sm:px-20 lg:px-40 md:pt-5 pt-2">
      
       <div className="flex items-center justify-between">
      
         
-        <h1 className="text-3xl md:text-4xl w-full ml-6 md:ml-0 md:w-max  items-center flex justify-center  font-serif font-extrabold">Lobuy</h1>
+        <h1 className="text-3xl md:text-4xl w-full ml-6 mb-1 md:ml-0 md:w-max  items-center flex justify-center  font-serif font-extrabold">Lobuy</h1>
 
        <div className="relative w-[600px] hidden md:flex">
   <MagnifyingGlassIcon className="w-5 h-5 text-gray-800 absolute left-3 top-3" />
@@ -47,7 +47,7 @@ function Header() {
 </div>
 
         {isAuthenticated?(
-<div className='gap-4 flex'  >
+<div className='gap-3 flex'  >
   <Link to={'/profile'} >
            <button className="flex items-center gap-2 text-black hover:text-gray-700">
       <User className="w-5 h-5" />
@@ -58,8 +58,8 @@ function Header() {
 
 
 
-            <button className="flex items-center space-x-2">
-      <ShoppingCart className="h-6 w-6 text-black" />
+            <button className=" flex space-x-2">
+      <ShoppingCart className="h-5 w-5 text-black" />
       <span className="text-sm font-medium hidden lg:inline" >Cart</span>
     </button>
 

@@ -22,7 +22,7 @@ useEffect(()=>{
     // Hide intro after 3 seconds
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 3000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);
