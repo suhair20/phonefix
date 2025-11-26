@@ -152,7 +152,7 @@ export default function Intro3DSequence() {
   return (
     <div className="w-full h-screen bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
         {/* 🚨 Updated Canvas camera position to Z=6 */}
-        <Canvas camera={{ position: [0, 0, 6], fov: 8 }}> 
+        <Canvas camera={{ position: [0, 0, 6], fov: 10 }}> 
             <ambientLight intensity={0.5} />
             {/* 🚨 Moved spotlight further back to compensate for camera distance */}
             <spotLight position={[40, 40, 40]} angle={0.8} penumbra={1} intensity={100} castShadow /> 
