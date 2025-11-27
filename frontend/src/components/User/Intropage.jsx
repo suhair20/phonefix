@@ -11,23 +11,20 @@ import "./Introduction.css"
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, Environment, Lightformer } from "@react-three/drei";
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 
-// -------------------------------------------
-// MODEL TARGET SIZES (Controls final size)
-// -------------------------------------------
+// Target size for headphone model
 const modelTargetSizes = {
-  headphones: 2.0, 
+  headphones: 2.0,
 };
 
-// -------------------------------------------
-// OPACITY HELPER
-// -------------------------------------------
 function setModelOpacity(object, opacity) {
   object.traverse((child) => {
     if (child.isMesh) {
-      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      const mats = Array.isArray(child.material)
+        ? child.material
+        : [child.material];
+
       mats.forEach((mat) => {
         mat.transparent = true;
         mat.opacity = opacity;
@@ -37,12 +34,10 @@ function setModelOpacity(object, opacity) {
   });
 }
 
-// -------------------------------------------
-// HEADPHONE MODEL WITH SMOOTH COMING FORWARD
-// -------------------------------------------
-function AnimatedModel({ file, visible }) {
+function AnimatedModel({ file, visible, onRotateStart }) {
   const gltf = useGLTF(`/models/${file}`);
   const ref = useRef();
+  const rotationStartedRef = useRef(false);
 
   useEffect(() => {
     if (gltf.scene) {
@@ -56,7 +51,7 @@ function AnimatedModel({ file, visible }) {
 
       gltf.scene.scale.set(scale, scale, scale);
 
-      // Start far away
+      // Start far back
       ref.current.position.z = 4;
 
       setModelOpacity(gltf.scene, 0);
@@ -66,35 +61,39 @@ function AnimatedModel({ file, visible }) {
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
 
-    if (ref.current && gltf.scene) {
-      // Smooth easing opacity
-      const targetOpacity = visible ? 1 : 0;
-      const lerpRate = visible ? 0.2 : 0.1;
+    if (!ref.current || !gltf.scene) return;
 
-      let currentOpacity = 0;
-      gltf.scene.traverse((child) => {
-        if (child.isMesh && child.material) {
-          currentOpacity = Array.isArray(child.material)
-            ? child.material[0].opacity
-            : child.material.opacity;
-          return;
-        }
-      });
+    // Fade opacity
+    const targetOpacity = visible ? 1 : 0;
+    let currentOpacity = 0;
 
-      const newOpacity = THREE.MathUtils.lerp(currentOpacity, targetOpacity, lerpRate);
-      setModelOpacity(gltf.scene, newOpacity);
+    gltf.scene.traverse((child) => {
+      if (child.isMesh && child.material) {
+        currentOpacity = Array.isArray(child.material)
+          ? child.material[0].opacity
+          : child.material.opacity;
+      }
+    });
 
-      // ----------------------------------------
-      // SMOOTH COME FORWARD (EASE-IN)
-      // ----------------------------------------
-      const targetZ = visible ? 0 : 4;
-      ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, targetZ, 0.08);
+    const newOpacity = THREE.MathUtils.lerp(currentOpacity, targetOpacity, 0.2);
+    setModelOpacity(gltf.scene, newOpacity);
 
-      // Small bounce movement
-      ref.current.position.y = Math.sin(t * 1.5) * 0.03;
+    // Smooth come forward
+    const targetZ = visible ? 0 : 4;
+    ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, targetZ, 0.06);
 
-      // Rotation
-      if (visible) ref.current.rotation.y += 0.01;
+    // Small floating animation
+    ref.current.position.y = Math.sin(t * 1.5) * 0.03;
+
+    // When rotation begins → trigger callback for showing LOBUY text
+    if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
+      rotationStartedRef.current = true;
+      onRotateStart(); // tell parent to show text
+    }
+
+    // Rotate only after visible
+    if (visible) {
+      ref.current.rotation.y += 0.01;
     }
   });
 
@@ -105,9 +104,6 @@ function AnimatedModel({ file, visible }) {
   );
 }
 
-// -------------------------------------------
-// CAMERA CONTROLLER
-// -------------------------------------------
 function CameraControl({ step }) {
   const { camera } = useThree();
 
@@ -121,27 +117,18 @@ function CameraControl({ step }) {
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, initialZ, 0.05);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.05);
     }
-
-    camera.updateProjectionMatrix();
   });
 
   return null;
 }
 
-// -------------------------------------------
-// MAIN INTRO COMPONENT
-// -------------------------------------------
 export default function Intro3DSequence() {
   const [step, setStep] = useState(0);
-  const navigate = useNavigate();
+  const [showText, setShowText] = useState(false); // NEW → controls LOBUY fade-in
 
   useEffect(() => {
-    const timers = [];
-
-    // Headphone starts after 1s
-    timers.push(setTimeout(() => setStep(1), 1000));
-
-    return () => timers.forEach(clearTimeout);
+    // Step 1 → Headphone shown
+    setTimeout(() => setStep(1), 1000);
   }, []);
 
   return (
@@ -153,8 +140,12 @@ export default function Intro3DSequence() {
 
         <CameraControl step={step} />
 
-        {/* Headphones with smooth forward animation */}
-        <AnimatedModel file="headphoness.glb" visible={step === 1} />
+        {/* Headphone */}
+        <AnimatedModel
+          file="headphoness.glb"
+          visible={step === 1}
+          onRotateStart={() => setShowText(true)} // Show LOBUY when rotation starts
+        />
 
         <Environment resolution={32}>
           <Lightformer intensity={4} position={[5, 0, -5]} scale={[10, 10, 1]} />
@@ -163,12 +154,12 @@ export default function Intro3DSequence() {
         </Environment>
       </Canvas>
 
-      <h1
-        className="absolute text-5xl md:text-7xl font-extrabold text-white font-serif drop-shadow-[0_0_35px_#0ea5e9] transition-opacity duration-500"
-       
-      >
-        <h2 className="intro-3d font-serif">LOBUY</h2>
-      </h1>
+      {/* LOBUY TEXT — fades in AFTER rotation starts */}
+    <h1
+  className={`absolute text-5xl md:text-7xl  font-extrabold text-white font-serif 
+  lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
+  <span  className="intro-3d" >LOBUY</span>
+</h1>
     </div>
   );
 }
