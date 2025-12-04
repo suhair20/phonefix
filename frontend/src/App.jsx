@@ -3,7 +3,8 @@ import './App.css'
 import {Outlet} from 'react-router-dom'
 import Intropage from "./components/User/Intropage"
 import { useDispatch } from "react-redux";
-import { checkAuthOnLoad } from "./utils/CheckAuth";
+import { checkAuthOnLoad } from "./utils/CheckAuth"; 
+import { useCheckAuthQuery } from "../slices/userSlice";
 
 
 function App() {
@@ -13,9 +14,17 @@ const [showIntro, setShowIntro] = useState(true);
 const dispatch=useDispatch()
 
 
-useEffect(()=>{
-    checkAuthOnLoad(dispatch);
-},[dispatch])
+  const { data, error, isLoading } = useCheckAuthQuery();
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setauthenticated(data.user));
+    }
+
+    if (error) {
+      dispatch(logout());
+    }
+  }, [data, error, dispatch]);
 
 
   useEffect(() => {

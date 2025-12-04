@@ -30,6 +30,15 @@ export const userSlice= createApi({
                 method:'POST',
                 body:data
             })
+        }),
+
+        checkAuth:builder.query({
+            query:()=>({
+                url:'/api/user/UserCheckAuth',
+                method:'GET',
+
+
+            })
         })
 
 
@@ -41,4 +50,5 @@ export const userSlice= createApi({
 export const {
     useSignupMutation,
     useVerifyOtpMutation,
+    useCheckAuthQuery
 }=userSlice

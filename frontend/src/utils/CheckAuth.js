@@ -1,28 +1,17 @@
-// src/utils/checkAuth.js
-import {jwtDecode}from  'jwt-decode'
-import { logout,setauthenticated } from "../../slices/AuthSlice";
+import { userSlice } from "../../slices/userSlice";
+import { logout, setauthenticated } from "../slices/AuthSlice";
 
-export const checkAuthOnLoad = (dispatch) => {
-  const token = localStorage.getItem("token");
-  if (!token) return;
-
+export const checkAuthOnLoad = async (dispatch) => {
   try {
-    const decoded = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
+    const result = await dispatch(
+      userSlice.endpoints.checkAuth.initiate()
+    ).unwrap();
 
-    if (decoded.exp > currentTime) {
-     console.log("welcome",decoded.exp,currentTime);
-     
-      dispatch(setauthenticated(decoded));
-    } else {
-    
-      console.log("Token expired, logging out...");
-      localStorage.removeItem("token");
-      dispatch(logout());
-    }
+    dispatch(setauthenticated(result.user));
   } catch (error) {
-    console.log("Invalid token", error);
-    localStorage.removeItem("token");
+    console.log(error);
+    
     dispatch(logout());
   }
 };
+

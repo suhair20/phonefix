@@ -22,7 +22,7 @@ const dispatch=useDispatch();
     console.log("OTP verified:", data);
 
     if (data.success) {
-      localStorage.setItem("token", data.token);
+     
       dispatch(setauthenticated(data.user));
       navigate("/");
     } else {

@@ -49,6 +49,14 @@ export const registration = async (req, res) => {
   }
 };
 
+
+
+////////////////////////////////////
+
+
+
+
+
 export const verifyotp = async (req, res) => {
   try {
     console.log("Verify OTP route hit");
@@ -75,12 +83,18 @@ export const verifyotp = async (req, res) => {
       email: user.email,
     });
 
-    return res.status(200).json({
-      success: true,
-      message: "OTP verified successfully",
-      token,
-      user,
-    });
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,       
+  sameSite: "strict",
+  maxAge: 24 * 60 * 60 * 1000 
+});
+
+return res.json({
+  success: true,
+  user: userData
+});
+
 
   } catch (error) {
     console.error("OTP Verify Error:", error);
@@ -89,3 +103,48 @@ export const verifyotp = async (req, res) => {
       .json({ success: false, message: "Server error", error: error.message });
   }
 };
+
+
+
+
+
+///////////////////////////////////
+
+
+export const login = async (req,res)=>{
+  try {
+
+ const {email,Password}=req.body
+  const User= await User.findOne({ email });
+
+  if(!User){
+    return res
+      .status(500)
+      .json({ success: false, message: "user not exist", error: error.message });
+
+  }
+
+   const isPasswordValid = await bcrypt.compare(Password,User.Password);
+
+   if(isPasswordValid){
+     const token =  Jwt.genrateToken({
+      id: User._id,
+      email: User.email,
+    })
+   }
+
+   
+
+    
+  } catch (error) {
+     console.error("login error :", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
+  }
+}
+
+
+
+
+//////////////////////////////////////////
