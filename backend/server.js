@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoute from './routes/userRoutes.js';
-
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
+app.use(cookieParser());
 // ✅ Correct route path
 app.use('/api/user', userRoute); // <-- note singular to match your frontend
 

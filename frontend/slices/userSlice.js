@@ -36,8 +36,17 @@ export const userSlice= createApi({
             query:()=>({
                 url:'/api/user/UserCheckAuth',
                 method:'GET',
+                   credentials: "include" 
 
+            })
+        }),
+        
 
+        login:builder.mutation({
+            query:(data)=>({
+                url:'/api/user/login',
+                method:'POST',
+                body:data
             })
         })
 
@@ -48,7 +57,10 @@ export const userSlice= createApi({
 })
 
 export const {
+
     useSignupMutation,
     useVerifyOtpMutation,
-    useCheckAuthQuery
+    useCheckAuthQuery,
+    useLoginMutation,
+
 }=userSlice

@@ -1,11 +1,49 @@
 import React from 'react'
 import { useState } from "react";
 import { Link } from 'react-router-dom'
+import { useLoginMutation } from '../../../slices/userSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { setauthenticated } from "../../../slices/AuthSlice";
+
 
 function UserLoginScreen() {
-   const [showPassword, setShowPassword] = useState(false);
+
+
+
+  const [email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] =useState("");
+  const dispatch=useDispatch();
+  const navigate = useNavigate();
+  const [login] = useLoginMutation();
+
+
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const data = await login({ email, Password }).unwrap();
+
+   
+    dispatch(setauthenticated(data.user));
+
+    
+    navigate("/");
+
+  } catch (err) {
+    console.error("Login error:", err);
+    setError(err?.data?.message || "Invalid email or password");
+  }
+};
+
+
+
+
   return (
-   <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6">
+   <div  className="min-h-screen  flex flex-col items-center justify-center bg-gray-100 px-6">
      
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-6">
          <h1 className="text-center text-3xl font-bold text-blue-950 p-4 mb-6 tracking-wider">Lobuy</h1>
@@ -16,7 +54,8 @@ function UserLoginScreen() {
        
 
         {/* Form */}
-        <form className="space-y-4 ">
+        <form  onSubmit={handleLogin} className="space-y-4 ">
+          {error && <p className="text-red-500 mb-2">{error}</p>}
           <div className='grid grid-cols-2 gap-2' >
           <div>
             <label className="block text-sm font-medium text-gray-700">Email address</label>
@@ -24,6 +63,7 @@ function UserLoginScreen() {
               type="email"
               className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring focus:border-blue-400"
               placeholder="you@example.com"
+               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -34,6 +74,7 @@ function UserLoginScreen() {
                 type={showPassword ? "text" : "password"}
                 className="w-full mt-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
                 placeholder="••••••••"
+                 onChange={(e) => setPassword(e.target.value)}
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}

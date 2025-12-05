@@ -85,14 +85,14 @@ export const verifyotp = async (req, res) => {
 
   res.cookie("token", token, {
   httpOnly: true,
-  secure: true,       
+  secure: false,       
   sameSite: "strict",
   maxAge: 24 * 60 * 60 * 1000 
 });
 
 return res.json({
   success: true,
-  user: userData
+  user: user
 });
 
 
@@ -111,40 +111,74 @@ return res.json({
 ///////////////////////////////////
 
 
-export const login = async (req,res)=>{
+export const login = async (req, res) => {
   try {
-
- const {email,Password}=req.body
-  const User= await User.findOne({ email });
-
-  if(!User){
-    return res
-      .status(500)
-      .json({ success: false, message: "user not exist", error: error.message });
-
-  }
-
-   const isPasswordValid = await bcrypt.compare(Password,User.Password);
-
-   if(isPasswordValid){
-     const token =  Jwt.genrateToken({
-      id: User._id,
-      email: User.email,
-    })
-   }
-
+ 
+    
+    const { email, Password } = req.body;
    
 
-    
+    // Find user
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist",
+      });
+    }
+
+    // Check password
+    const isPasswordValid = await bcrypt.compare(Password, existingUser.Password);
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid password",
+      });
+    }
+
+    // Generate token
+    const token = Jwt.genrateToken({
+      id: existingUser._id,
+      email: existingUser.email,
+    });
+
+    // Send cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    // Success response
+    return res.json({
+      success: true,
+      user: existingUser,
+    });
+
   } catch (error) {
-     console.error("login error :", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Server error", error: error.message });
+    console.error("login error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
-}
+};
+
 
 
 
 
 //////////////////////////////////////////
+
+
+
+export const checkAuth =async (req,res)=>{
+  console.log("coominhgh");
+  
+   return res.json({
+    success: true,
+    user: req.user,
+  });
+}

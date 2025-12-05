@@ -3,8 +3,9 @@ import './App.css'
 import {Outlet} from 'react-router-dom'
 import Intropage from "./components/User/Intropage"
 import { useDispatch } from "react-redux";
-import { checkAuthOnLoad } from "./utils/CheckAuth"; 
+
 import { useCheckAuthQuery } from "../slices/userSlice";
+import { setauthenticated,logout } from "../slices/AuthSlice";
 
 
 function App() {
@@ -18,10 +19,14 @@ const dispatch=useDispatch()
 
   useEffect(() => {
     if (data) {
+      console.log("its login");
+      
       dispatch(setauthenticated(data.user));
     }
 
     if (error) {
+      console.log("its not comin ",error);
+      
       dispatch(logout());
     }
   }, [data, error, dispatch]);

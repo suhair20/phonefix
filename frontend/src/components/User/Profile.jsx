@@ -28,10 +28,10 @@ const handleMenuClick = (menu) => {
   return (
     <>
     <Header/>
-    <div className=' shadow-md  bg-gray-400 h-full ' >
+    <div className=' shadow-md   h-full ' >
    
 
-  <div className="fixed md:px-32    items-center justify-center left-0 w-full p-4 h-full bg-slate-100 z-50 overflow-y-auto animate-slideDown">
+  <div className="fixed md:px-32    items-center justify-center left-0 w-full p-4 h-full  z-50 overflow-y-auto ">
 
     <div  className='  md:px-16  items-center justify-center   ' >
     

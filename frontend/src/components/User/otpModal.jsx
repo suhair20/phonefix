@@ -6,7 +6,7 @@ import { setauthenticated } from "../../../slices/AuthSlice";
 
 const otpModal = ({ email,  onClose }) => {
 
-const dispatch=useDispatch();
+  const dispatch=useDispatch();
 
   const [otp, setOtp] =useState("");
   
@@ -17,22 +17,16 @@ const dispatch=useDispatch();
  const handleSubmit = async (e) => {
   e.preventDefault();
 
-  try {
-    const data = await verifyOtp({ email, otp }).unwrap();
-    console.log("OTP verified:", data);
+ try {
+  const data = await verifyOtp({ email, otp }).unwrap();
 
-    if (data.success) {
-     
-      dispatch(setauthenticated(data.user));
-      navigate("/");
-    } else {
-      setError("Invalid OTP");
-    }
+  dispatch(setauthenticated(data.user));
+  navigate("/");
 
-  } catch (err) {
-    console.error("OTP error:", err);
-    setError(err?.data?.message || "Invalid OTP");
-  }
+} catch (err) {
+  console.error("OTP error:", err);
+  setError(err?.data?.message || "Invalid OTP");
+}
 };
 
   return (
