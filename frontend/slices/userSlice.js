@@ -48,9 +48,27 @@ export const userSlice= createApi({
                 method:'POST',
                 body:data
             })
-        })
+        }),
+
+addAddress: builder.mutation({
+  query: (data) => ({
+    url: "/api/user/addaddress",
+    method: "POST",
+    body:data,
+    credentials: "include",
+  }),
+}),
 
 
+
+
+        getAddress: builder.query({
+         query: () => ({
+          url: "/api/user/get-address",
+          method:'GET',
+         credentials: "include",
+                  })
+         })
 
     })
     
@@ -62,5 +80,7 @@ export const {
     useVerifyOtpMutation,
     useCheckAuthQuery,
     useLoginMutation,
+    useGetAddressQuery,
+    useAddAddressMutation   
 
 }=userSlice

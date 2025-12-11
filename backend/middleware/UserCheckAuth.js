@@ -6,7 +6,7 @@ export function UserCheckAuth(req, res, next) {
   
   const token = req.cookies.token;
 
-  console.log("it onn the way ");
+ 
   
   if (!token) {
     return res.status(401).json({ message: "Not logged in" });

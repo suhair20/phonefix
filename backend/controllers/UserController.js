@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import { otpService } from '../Services/otpService.js';
 import User from '../models/userModel.js';
 import Jwt from '../Services/jwt.js';
+import Address from '../models/Address.js'
 
  
 export const registration = async (req, res) => {
@@ -175,10 +176,65 @@ export const login = async (req, res) => {
 
 
 export const checkAuth =async (req,res)=>{
-  console.log("coominhgh");
+  
   
    return res.json({
     success: true,
     user: req.user,
   });
 }
+
+
+export const addAddress = async (req, res) => {
+   try { 
+
+    console.log("its comiuuuchelo");
+    
+    const userId = req.user.id; 
+    const {
+       fullName, 
+      phone,
+       district,
+        city,
+         pincode,
+          addressLine,
+           landmark, } = req.body;
+
+
+
+     const address = await Address.create( { userId ,
+        fullName,
+         phone,
+          district,
+           city, 
+           pincode,
+            addressLine, 
+            landmark, 
+            state: "Kerala", },
+        ); 
+       return res.json({ success: true, message: "Address saved successfully", address, }); } 
+       catch (err) 
+       { return res.status(500).json({ success: false, message: err.message }); } };
+
+
+
+
+
+        export const getAddress = async (req, res) => { 
+          try { 
+            
+            console.log("cominghghghghsfd");
+            
+
+            const userId = req.user.id;
+            
+            const addresses = await Address.find({ userId });
+            console.log('verunnu',addresses);
+            
+            return res.json({ success: true, addresses });
+           } 
+           
+           catch (err) { 
+            return
+             res.status(500).json({ success: false, message: err.message }); 
+            } };
