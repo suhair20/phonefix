@@ -38,6 +38,7 @@ function AnimatedModel({ file, visible, onRotateStart }) {
   const gltf = useGLTF(`/models/${file}`);
   const ref = useRef();
   const rotationStartedRef = useRef(false);
+  const opacityRef = useRef(0);
 
   useEffect(() => {
     if (gltf.scene) {
@@ -58,44 +59,42 @@ function AnimatedModel({ file, visible, onRotateStart }) {
     }
   }, [gltf, file]);
 
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
+ useFrame((state) => {
+  const t = state.clock.getElapsedTime();
 
-    if (!ref.current || !gltf.scene) return;
+  if (!ref.current || !gltf.scene) return;
 
-    // Fade opacity
-    const targetOpacity = visible ? 1 : 0;
-    let currentOpacity = 0;
+  // Opacity fade (GPU safe)
+  opacityRef.current = THREE.MathUtils.lerp(
+    opacityRef.current,
+    visible ? 1 : 0,
+    0.2
+  );
+  setModelOpacity(gltf.scene, opacityRef.current);
 
-    gltf.scene.traverse((child) => {
-      if (child.isMesh && child.material) {
-        currentOpacity = Array.isArray(child.material)
-          ? child.material[0].opacity
-          : child.material.opacity;
-      }
-    });
+  // Smooth come forward
+  const targetZ = visible ? 0 : 4;
+  ref.current.position.z = THREE.MathUtils.lerp(
+    ref.current.position.z,
+    targetZ,
+    0.06
+  );
 
-    const newOpacity = THREE.MathUtils.lerp(currentOpacity, targetOpacity, 0.2);
-    setModelOpacity(gltf.scene, newOpacity);
+  // Floating
+  ref.current.position.y = Math.sin(t * 1.5) * 0.03;
 
-    // Smooth come forward
-    const targetZ = visible ? 0 : 4;
-    ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, targetZ, 0.06);
+  // Trigger text once
+  if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
+    rotationStartedRef.current = true;
+    onRotateStart();
+  }
 
-    // Small floating animation
-    ref.current.position.y = Math.sin(t * 1.5) * 0.03;
+  // Rotate
+  if (visible) {
+    ref.current.rotation.y += 0.01;
+  }
+});
 
-    // When rotation begins → trigger callback for showing LOBUY text
-    if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
-      rotationStartedRef.current = true;
-      onRotateStart(); // tell parent to show text
-    }
-
-    // Rotate only after visible
-    if (visible) {
-      ref.current.rotation.y += 0.01;
-    }
-  });
 
   return (
     <group ref={ref}>
@@ -108,19 +107,15 @@ function CameraControl({ step }) {
   const { camera } = useThree();
 
   useFrame(() => {
-    const initialZ = 6;
+    if (step !== 1) return;
 
-    if (step === 1) {
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 7.5, 0.03);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.05, 0.03);
-    } else {
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, initialZ, 0.05);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.05);
-    }
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
 
   return null;
 }
+
 
 export default function Intro3DSequence() {
   const [step, setStep] = useState(0);
@@ -132,9 +127,14 @@ export default function Intro3DSequence() {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
+  <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
 
-      <Canvas camera={{ position: [0, 0, 7], fov: 17 }}>
+
+     <Canvas
+  dpr={[1, 1.5]}
+  camera={{ position: [0, 0, 6], fov: 9 }}
+>
+
         <ambientLight intensity={0.6} />
         <spotLight position={[40, 40, 40]} intensity={100} angle={0.8} />
 
