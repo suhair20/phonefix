@@ -1,19 +1,9 @@
-// import React from "react";
-import "./Introduction.css" 
-
-// const PhoneFixIntro = () => {
-//   return (
-//     <div className="h-screen  text-1xl md:text-4xl flex items-center justify-center bg-gradient-to-tr from-blue-950 via-black to-blue-950">
-//       <h2 className="intro-3d  font-serif ">LOBUY</h2>
-//     </div>
-//   );
-// };
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, Environment, Lightformer } from "@react-three/drei";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import * as THREE from "three";
+import "./Introduction.css";
 
-// Target size for headphone model
 const modelTargetSizes = {
   headphones: 2.0,
 };
@@ -21,10 +11,7 @@ const modelTargetSizes = {
 function setModelOpacity(object, opacity) {
   object.traverse((child) => {
     if (child.isMesh) {
-      const mats = Array.isArray(child.material)
-        ? child.material
-        : [child.material];
-
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
       mats.forEach((mat) => {
         mat.transparent = true;
         mat.opacity = opacity;
@@ -45,56 +32,35 @@ function AnimatedModel({ file, visible, onRotateStart }) {
       const box = new THREE.Box3().setFromObject(gltf.scene);
       const size = new THREE.Vector3();
       box.getSize(size);
-
       const maxSize = Math.max(size.x, size.y, size.z);
       const targetSize = modelTargetSizes[file.split(".")[0]] || 1;
       const scale = targetSize / maxSize;
-
       gltf.scene.scale.set(scale, scale, scale);
-
-      // Start far back
       ref.current.position.z = 4;
-
       setModelOpacity(gltf.scene, 0);
     }
   }, [gltf, file]);
 
- useFrame((state) => {
-  const t = state.clock.getElapsedTime();
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (!ref.current || !gltf.scene) return;
 
-  if (!ref.current || !gltf.scene) return;
+    opacityRef.current = THREE.MathUtils.lerp(opacityRef.current, visible ? 1 : 0, 0.2);
+    setModelOpacity(gltf.scene, opacityRef.current);
 
-  // Opacity fade (GPU safe)
-  opacityRef.current = THREE.MathUtils.lerp(
-    opacityRef.current,
-    visible ? 1 : 0,
-    0.2
-  );
-  setModelOpacity(gltf.scene, opacityRef.current);
+    const targetZ = visible ? 0 : 4;
+    ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, targetZ, 0.06);
+    ref.current.position.y = Math.sin(t * 1.5) * 0.03;
 
-  // Smooth come forward
-  const targetZ = visible ? 0 : 4;
-  ref.current.position.z = THREE.MathUtils.lerp(
-    ref.current.position.z,
-    targetZ,
-    0.06
-  );
+    if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
+      rotationStartedRef.current = true;
+      onRotateStart();
+    }
 
-  // Floating
-  ref.current.position.y = Math.sin(t * 1.5) * 0.03;
-
-  // Trigger text once
-  if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
-    rotationStartedRef.current = true;
-    onRotateStart();
-  }
-
-  // Rotate
-  if (visible) {
-    ref.current.rotation.y += 0.01;
-  }
-});
-
+    if (visible) {
+      ref.current.rotation.y += 0.01;
+    }
+  });
 
   return (
     <group ref={ref}>
@@ -105,46 +71,50 @@ function AnimatedModel({ file, visible, onRotateStart }) {
 
 function CameraControl({ step }) {
   const { camera } = useThree();
-
   useFrame(() => {
     if (step !== 1) return;
-
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
-
   return null;
 }
 
-
 export default function Intro3DSequence() {
   const [step, setStep] = useState(0);
-  const [showText, setShowText] = useState(false); // NEW → controls LOBUY fade-in
+  const [showText, setShowText] = useState(false);
+  
+  // Calculate FOV dynamically based on screen width
+  const [fov, setFov] = useState(15);
 
   useEffect(() => {
-    // Step 1 → Headphone shown
+    const handleResize = () => {
+      // If screen is narrow (mobile), use a wider FOV (30) so model isn't huge
+      // If screen is wide (desktop), use a tighter FOV (12-15)
+      setFov(window.innerWidth < 768 ? 28 : 7);
+    };
+
+    handleResize(); // Set initial
+    window.addEventListener("resize", handleResize);
     setTimeout(() => setStep(1), 1000);
+    
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-  <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
-
-
-     <Canvas
-  dpr={[1, 1.5]}
-  camera={{ position: [0, 0, 6], fov: 9 }}
->
-
+    <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
+      <Canvas
+        dpr={typeof window !== "undefined" ? window.devicePixelRatio : 1}
+        camera={{ position: [0, 0, 6], fov: fov }}
+      >
         <ambientLight intensity={0.6} />
         <spotLight position={[40, 40, 40]} intensity={100} angle={0.8} />
 
         <CameraControl step={step} />
 
-        {/* Headphone */}
         <AnimatedModel
           file="headphoness.glb"
           visible={step === 1}
-          onRotateStart={() => setShowText(true)} // Show LOBUY when rotation starts
+          onRotateStart={() => setShowText(true)}
         />
 
         <Environment resolution={32}>
@@ -154,12 +124,9 @@ export default function Intro3DSequence() {
         </Environment>
       </Canvas>
 
-      {/* LOBUY TEXT — fades in AFTER rotation starts */}
-    <h1
-  className={`absolute text-5xl md:text-7xl  font-extrabold text-white font-serif 
-  lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
-  <span  className="intro-3d" >LOBUY</span>
-</h1>
+      <h1 className={`absolute text-5xl md:text-7xl font-extrabold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
+        <span className="intro-3d">LOBUY</span>
+      </h1>
     </div>
   );
 }
