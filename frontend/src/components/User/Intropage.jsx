@@ -100,13 +100,13 @@ export default function Intro3DSequence() {
   const [showText, setShowText] = useState(false);
   
   // Calculate FOV dynamically based on screen width
-  const [fov, setFov] = useState(9);
+  const [fov, setFov] = useState(7);
 
   useEffect(() => {
     const handleResize = () => {
       // If screen is narrow (mobile), use a wider FOV (30) so model isn't huge
       // If screen is wide (desktop), use a tighter FOV (12-15)
-      setFov(window.innerWidth < 768 ? 30 : 7);
+      setFov(window.innerWidth < 768 ? 25 : 15);
     };
 
     handleResize(); // Set initial
