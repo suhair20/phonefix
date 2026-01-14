@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { ShoppingCart } from "lucide-react";
 import { User,  } from "lucide-react";
+import { useGetCategoriesQuery } from '../../../slices/userSlice';
 
 
 
@@ -17,6 +18,9 @@ function Header() {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const {isAuthenticated}=useSelector((state)=>state.auth)
+
+    const { data: categories = [], isLoading } = useGetCategoriesQuery();
+
   return (
     <div>
      
@@ -95,22 +99,12 @@ function Header() {
          <Link to={'/'} >
         <p className="hover:text-blue-600">Home</p>
         </Link>
-        <Link to={'/shop'} >
-        <p className="hover:text-blue-600">Men Watches</p>
-        </Link>
-         <Link to={'/shop'} >
-        <p className="hover:text-blue-600">Head phone</p>
-        </Link>
-         <Link to={'/shop'} >
-        <p className="hover:text-blue-600">Ear pode</p>
-        </Link>
-         <Link to={'/shop'} >
-        <p className="hover:text-blue-600">Girl Watches</p>
-        </Link>
-        
-         <Link to={'/shop'} >
-        <p className="hover:text-blue-600">Accessories</p>
-        </Link>
+         {!isLoading &&
+    categories.map((cat) => (
+      <Link key={cat._id} to={`/shop/${cat._id}`}>
+        <p className="hover:text-blue-600">{cat.name}</p>
+      </Link>
+    ))}
          <Link to={'/shop'} >
         <p className="hover:text-blue-600">Contact</p>
         </Link>

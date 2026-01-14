@@ -59,6 +59,14 @@ addAddress: builder.mutation({
   }),
 }),
 
+GetProductByIdQuery:builder.query({
+    query:(id)=>({
+   url:`/api/user/productbyId/${id}`,
+   method:"GET",
+   credentials:"include"
+    })
+}),
+
 
 
 
@@ -68,7 +76,34 @@ addAddress: builder.mutation({
           method:'GET',
          credentials: "include",
                   })
+         }),
+
+
+
+         getLatestProducts:builder.query({
+         query:(limit=5)=>({
+         url:`/api/user/products/latest?limit=${limit}`,
+         method:'GET',
+         credentials:"include"
          })
+
+         }),
+
+         getCategories: builder.query({
+          query: () => ({
+         url: "/api/user/categories",
+          method: "GET",
+            }),
+}),
+
+
+        GetProductsByCategory:builder.query({
+            query:(id)=>({
+               url:`/api/user/productbycategory/${id}`,
+               method:"GET"  
+            })
+        })
+
 
     })
     
@@ -81,6 +116,10 @@ export const {
     useCheckAuthQuery,
     useLoginMutation,
     useGetAddressQuery,
-    useAddAddressMutation   
+    useAddAddressMutation   ,
+    useGetLatestProductsQuery,
+    useGetProductByIdQueryQuery,
+    useGetCategoriesQuery,
+    useGetProductsByCategoryQuery
 
 }=userSlice

@@ -1,13 +1,29 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+
+
 // import SalesChart from "./SalesChart";
 
 const Dashboard = () => {
+
+
+    const { isAuthenticated } = useSelector(
+    (state) => state.adminAuth
+  );
+
+
+ 
   return (
     <div>
-      <Sidebar />
-      <Navbar />
+      {isAuthenticated && <Sidebar />
+       }
+       <Navbar />
+      
       <div className="ml-64 mt-16  w-full p-8 space-y-6 bg-gray-50 min-h-screen">
 
         {/* Cards Section */}

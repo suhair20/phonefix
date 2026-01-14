@@ -1,17 +1,28 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import image2 from '../../assets/watch.png';
-import image3 from '../../assets/headset.png';
-import image4 from '../../assets/earrrrpod.png';
-import image5 from '../../assets/earpod.png';
-import Header from './Header';
 
-const images = [image2, image3, image4, image5];
+import Header from './Header';
+import { useParams } from "react-router-dom";
+import { useGetProductByIdQueryQuery } from '../../../slices/userSlice';
+
+
 
 function ShowProduct() {
+   const { id } = useParams();
+  const { data: product, isLoading } = useGetProductByIdQueryQuery(id);
 
-      const [mainImage, setMainImage] = useState(images[0]);
+      const [mainImage, setMainImage] = useState('');
+
+
+   useEffect(() => {
+  if (product?.images?.length > 0) {
+    setMainImage(product.images[0].url);
+  }
+}, [product]);
+
+
+
   return (
     <div className='bg-[#fefffdd8] mb-20' >
         <Header/>
@@ -21,30 +32,29 @@ function ShowProduct() {
   <div className="flex flex-col gap-2  items-center justify-center md:w-1/2">
     <img src={mainImage} alt="Main Watch" className=" object-cover w-80 h-80" />
 
-    <div className="flex gap-2 mt-3">
-          {images.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`Thumbnail ${index}`}
-              className={`w-16 h-16 rounded-md border cursor-pointer hover:opacity-80 ${
-                mainImage === img ? 'ring-2 ring-blue-500' : ''
-              }`}
-              onClick={() => setMainImage(img)}
-            />
-          ))}
-        </div>
+   <div className="flex gap-2 mt-3">
+    {product?.images?.map((img, index) => (
+      <img
+        key={index}
+        src={img.url}
+        alt={`Thumbnail ${index}`}
+        className={`w-16 h-16 rounded-md border cursor-pointer hover:opacity-80 ${
+          mainImage === img.url ? "ring-2 ring-blue-500" : ""
+        }`}
+        onClick={() => setMainImage(img.url)}
+      />
+    ))}
+  </div>
   </div>
 
   {/* Right Side - Product Details */}
   <div className="md:w-1/2 flex flex-col justify-between">
     <div>
-      <h1 className="text-2xl font-semibold mb-2">Rolex GMT-Master Pepsi 16750</h1>
+      <h1 className="text-2xl font-semibold mb-2">{product?.name}</h1>
       <p className="text-sm text-gray-500 mb-2">
-        Used (<span className="text-green-600">Very good</span>) | Year: 1985 (Approx.) <br />
-        No original box | No original papers
+        {product?.description}
       </p>
-      <p className="text-3xl font-bold text-black my-4">$9,600</p>
+      <p className="text-3xl font-bold text-black my-4">${product?.price}</p>
 
       {/* Payment Icons */}
       

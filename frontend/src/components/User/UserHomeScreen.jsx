@@ -18,9 +18,15 @@ import image2 from '../../assets/watch.png';
 import image3 from '../../assets/headset.png'
 import image4 from '../../assets/earrrrpod.png'
 import image5 from '../../assets/earpod.png'
-
+import { useGetLatestProductsQuery } from '../../../slices/userSlice';
 
 function UserHomeScreen() {
+  
+const { data, isLoading } = useGetLatestProductsQuery(8);
+
+const products = Array.isArray(data) ? data : data?.products || [];
+const sliderProducts = products.length ? [...products, ...products] : [];
+console.log("API DATA:", data);
   return (
     <>
     <div className='   ' >
@@ -44,9 +50,13 @@ function UserHomeScreen() {
 
 <div className="w-full overflow-x-auto  scroll-smooth snap-x snap-mandatory touch-auto hide-scrollbar">
   <div className="flex w-max md:gap-28 mt-20 mb-6  md:mt-40 gap-14 animate-slide hover:[animation-play-state:paused]">
+
+     {isLoading && (
+      <p className="text-white px-10">Loading products...</p>
+    )}
     {/* Original + duplicate cards */}
-    {[...Array(2)].map((_, i) => (
-      <React.Fragment key={i}>
+    {!isLoading &&
+      sliderProducts.map((product, index) => (
        
 
 
@@ -54,23 +64,28 @@ function UserHomeScreen() {
 
 
        
-        <div className='  group relative md:h-80 p-3  items-center justify-center h-60 w-44 rounded-2xl  md:w-72 overflow-hidden text-white cursor-pointer transition-transform duration-300 ease-in-out bg-gray-950'>
+          <div
+          key={index}
+          className={`group relative md:h-80 h-60 w-44 md:w-60 p-3 rounded-2xl overflow-hidden text-white cursor-pointer transition-transform duration-300 ease-in-out
+            ${index % 2 === 0 ? "bg-gray-950" : "bg-gray-950"}`}
+        >
 
            <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
-           Limited to 50 pieces
+           Limited to {product.stock} pieces
            </div>
-            <Link to={'/product'} >  
+            <Link to={`/product/${product._id}`} >  
          <div className="mt-12 flex items-center justify-center">
         <img
-         src={image3}
+         src={product.images?.[0]?.url}
          alt="Watch"
-           className="md:w-44 w-24   group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
+           className="md:w-44 w-24  md:h-36  h-28 group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
         />
      </div>
      </Link>
-           <div className="absolute mt-4  ">
-    <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-CUBK</p>
-    <p className="text-xs md:text-sm font-semibold">SPACE TIMER JUPITER GOLD</p>
+           <div className="absolute mt-8  ">
+    <p className="text-xs md:text-sm font-semibold"> {product.name}</p>
+    <p className="text-xs md:text-sm font-semibold"> ₹{product.price}</p>
+    
   </div>
          
         </div>
@@ -83,80 +98,12 @@ function UserHomeScreen() {
 
 
 
-       <div className="  group relative bg-[#262e48] rounded-2xl p-3  md:h-80  h-60 w-44 md:w-72   text-white overflow-hidden  cursor-pointer transition-transform duration-300 ease-in-out ">
-  {/* Limited badge */}
-  <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
-    Limited to 30 pieces
-  </div>
-
-  {/* Watch image with angle */}
-   <Link to={'/product'} >  
-  <div className="mt-12 flex items-center justify-center">
-    <img
-      src={image2}
-      alt="Watch"
-      className="md:w-44 w-24 rotate-[35deg] scale-110   group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
-    />
-  </div>
-  </Link>
-
-  {/* Text content */}
-  <div className="absolute mt-4 ">
-    <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-CUBK</p>
-    <p className="text-xs md:text-sm font-semibold">SPACE TIMER JUPITER GOLD</p>
-  </div>
-</div>
 
 
 
 
 
-
-        <div className=' group  relative md:h-80 p-3  items-center justify-center h-60 w-44 rounded-2xl  md:w-72 overflow-hidden text-white bg-gray-950 cursor-pointer transition-transform duration-300 ease-in-out '>
-
-           <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
-           Limited to 25 pieces
-           </div>
-            <Link to={'/product'} >  
-         <div className="mt-12 flex items-center justify-center">
-        <img
-         src={image4}
-         alt="Watch"
-           className="md:w-44 w-24 rotate-[35deg] scale-110  group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
-        />
-     </div>
-     </Link>
-           <div className="absolute mt-4 ">
-    <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-9UBK</p>
-    <p className="text-xs md:text-sm font-semibold">KDM AirPod</p>
-  </div>
-         
-        </div>
-
-
-
-
-
-         <div className=' group   relative md:h-80 p-3  items-center justify-center h-60 w-44 rounded-2xl  md:w-72 overflow-hidden text-white bg-[#262e48]  cursor-pointer transition-transform duration-300 ease-in-out'>
-
-           <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
-           Limited to 37 pieces
-           </div>
-            <Link to={'/product'} >  
-         <div className="mt-12 flex items-center justify-center">
-        <img
-         src={image5}
-         alt="Watch"
-           className="md:w-44 w-24 rotate-[35deg] scale-110   group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
-        />
-     </div>
-     </Link>
-           <div className="absolute mt-4 ">
-    <p className="text-xs text-gray-400 tracking-wider">CH-99941.2-CUBK</p>
-    <p className="text-xs md:text-sm font-semibold">AirPods pro</p>
-  </div>
-         
-        </div>
+       
 
 
 
@@ -164,33 +111,13 @@ function UserHomeScreen() {
 
 
 
-        <div className='  group relative md:h-80 p-3  items-center justify-center h-60 w-44 rounded-2xl  md:w-72 overflow-hidden text-white bg-[#121a34] cursor-pointer transition-transform duration-300 ease-in-out '>
-
-           <div className="absolute   bg-[#5c3c2d] text-xs text-[#f0c590] px-3 py-1 rounded-full uppercase font-semibold">
-           Limited to 58 pieces
-           </div>
-            <Link to={'/product'} >  
-         <div className="mt-12 flex items-center justify-center">
-        <img
-         src={image2}
-         alt="Watch"
-           className="md:w-44 w-24 rotate-[35deg] scale-110  group-hover:scale-125 group-focus:scale-125 transition-transform duration-500 ease-in-out "
-        />
-     </div>
-     </Link>
-           <div className="absolute mt-4 ">
-    <p className="text-xs text-gray-400 tracking-wider">CH-9341.2-CUBK</p>
-    <p className="text-xs md:text-sm font-semibold">SPACE TIMER JUPITER GOLD</p>
-  </div>
-         
 
 
 
 
 
-
-        </div>
-      </React.Fragment>
+      
+     
     ))}
   </div>
 </div>

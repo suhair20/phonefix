@@ -5,7 +5,8 @@ import { otpService } from '../Services/otpService.js';
 import User from '../models/userModel.js';
 import Jwt from '../Services/jwt.js';
 import Address from '../models/Address.js'
-
+import Product from '../models/product.Model.js'
+import categories from '../models/CategoryModel.js'
  
 export const registration = async (req, res) => {
   try {
@@ -238,3 +239,102 @@ export const addAddress = async (req, res) => {
             return
              res.status(500).json({ success: false, message: err.message }); 
             } };
+
+
+
+
+
+            export const getLatestProducts =async (req,res)=>{
+              try {
+
+                 const limit = Number(req.query.limit) || 5;
+   
+    
+              const products = await Product.find({is_active: true })
+                   .sort({ createdAt: -1 })
+                   .limit(limit);
+
+
+ 
+                 res.status(200).json(products)
+                
+              } catch (error) {
+                 console.error("LATEST PRODUCT ERROR:", error.message);
+  console.error(error);
+  res.status(500).json({ message: error.message });
+                
+              }
+            }
+
+
+
+       
+export const getproductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+  
+  
+    if (!id) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    console.log(
+      'zkjdk'
+    );
+    
+    console.error("getproductById error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+export const getcategories =async (req,res)=>{
+  try {
+const Categories= await categories.find()
+
+
+
+
+  if (!Categories) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+   res.status(200).json(Categories);  
+
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+
+export const productbycategory =async(req,res)=>{
+  try {
+ const { id } = req.params;
+ console.log(id,"idsak");
+ 
+
+    const cproducts = await Product.find({ category: req.params.id });
+    console.log("jiooo",cproducts);
+      if (!cproducts) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+   res.status(200).json(cproducts);
+  } catch (error) {
+
+    console.log(error);
+    
+  }
+} 

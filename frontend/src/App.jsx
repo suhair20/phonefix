@@ -19,13 +19,13 @@ const dispatch=useDispatch()
 
   useEffect(() => {
     if (data) {
-      console.log("its login");
+    
       
       dispatch(setauthenticated(data.user));
     }
 
     if (error) {
-      console.log("its not comin ",error);
+     
       
       dispatch(logout());
     }

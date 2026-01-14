@@ -12,7 +12,7 @@ import OrderDetials from "../components/User/OrderDetials";
 const UserRoutes=(
     <>
   <Route path="/" element={<UserHomeScreen/>}/>
-  <Route path="/shop" element={<UserProductScreen/>} />
+  <Route path="/shop/:categoryId" element={<UserProductScreen/>} />
   <Route path="/product"  element={<ShowProduct/>}  />
   <Route path='/login' element={<UserLoginScreen/>} />
   <Route path="/Register" element={<UserRegister/>} />
@@ -21,6 +21,7 @@ const UserRoutes=(
   <Route path="/profile" element={<Profile/>}/>
   <Route path="/Orders" element={<Orders/>} />
   <Route path="/Orderdetials" element={<OrderDetials/>} />
+  <Route path="/product/:id" element={<ShowProduct/>} />
 </>
 
 )

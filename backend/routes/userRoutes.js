@@ -13,7 +13,10 @@ userRoute.get('/UserCheckAuth',UserCheckAuth.UserCheckAuth,usercontroller.checkA
 userRoute.post('/login',usercontroller.login)
 userRoute.post('/addaddress',UserCheckAuth.UserCheckAuth,usercontroller.addAddress)
 userRoute.get('/get-address',UserCheckAuth.UserCheckAuth,usercontroller.getAddress)
-
+userRoute.get('/products/latest',usercontroller.getLatestProducts)
+userRoute.get('/productbyId/:id',usercontroller.getproductById)
+userRoute.get('/categories',usercontroller.getcategories)
+userRoute.get('/productbycategory/:id',usercontroller.productbycategory)
 
 
 

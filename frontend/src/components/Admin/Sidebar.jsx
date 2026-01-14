@@ -9,9 +9,9 @@ function Sidebar() {
   
       <nav className="mt-6">
         <ul>
-          <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaTachometerAlt /><Link to="/admin/dashboard">Dashboard</Link></li>
+          <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaTachometerAlt /><Link to="/admin">Dashboard</Link></li>
           <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaBox /><Link to="/admin/products">Products</Link></li>
-          <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaTags /><Link to="/admin/ctegory">Categories</Link></li>
+          <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaTags /><Link to="/admin/category">Categories</Link></li>
           <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaImage /><Link to="/admin/Banner">Banners</Link></li>
           <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaUsers /><Link to="/admin/users">Users</Link></li>
           <li className="p-4 hover:bg-gray-700 flex items-center gap-3"><FaChartBar /><Link to="/admin/reports">Reports</Link></li>

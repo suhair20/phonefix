@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Package, Upload } from "lucide-react";
+import { useAddProductMutation } from "../../../slices/AdminSlice";
+import { useGetCategoryQuery } from "../../../slices/AdminSlice";
+import { toast } from "react-toastify";
 
 const AddProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
   const [images, setImages] = useState([null, null, null, null]); // 4 image slots
   const navigate = useNavigate();
 
-  const categories = ["Watches", "Shoes", "Mobiles", "Clothes", "Accessories"];
+  const [addProduct, {isLoading:isLoadingadding }] = useAddProductMutation();
+const { data, isLoadingg } =useGetCategoryQuery();
+
+ 
 
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
@@ -19,23 +26,45 @@ const AddProduct = () => {
     newImages[index] = file;
     setImages(newImages);
   };
+const handleAddProduct = async () => {
+ if (!name || !price || !stock || !category || !description) {
+  toast.error("All fields are required");
+  return;
+}
 
-  const handleAddProduct = async () => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("stock", stock);
-    formData.append("category", category);
-    images.forEach((img) => {
-      if (img) formData.append("images", img);
-    });
+  if (images.filter(Boolean).length === 0) {
+    toast.error("At least one image is required");
+    return;
+  }
 
-    // Example API call
-    // await axios.post("http://localhost:5000/api/products", formData, {
-    //   headers: { "Content-Type": "multipart/form-data" },
-    // });
-    // navigate("/admin/products");
-  };
+  const formData = new FormData();
+formData.append("name", name);
+formData.append("price", price);
+formData.append("stock", stock);
+formData.append("category", category);
+formData.append("description", description);
+
+
+  images.forEach((img) => {
+    if (img) formData.append("images", img);
+  });
+
+  try {
+    const res = await addProduct(formData).unwrap();
+
+ if(res.success){
+ toast.success("Product added successfully");
+
+    navigate("/admin/products");
+ }
+
+   
+  } catch (error) {
+    console.log(error);
+    
+    toast.error(error?.data?.message || "Failed to add product");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,7 +92,8 @@ const AddProduct = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Left side inputs */}
-            <div>
+            <div className="grid md:grid-cols-2 gap-2" >
+              
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">Product Name</label>
                 <input
@@ -96,25 +126,46 @@ const AddProduct = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">Category</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg  p-3 focus:ring-2 focus:ring-green-500 outline-none"
-                >
-                    <div className="" >
-                  <option className="" value="">Select Category</option>
-                  {categories.map((cat, idx) => (
-                    <option className="" key={idx} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                  </div>
-                </select>
-              </div>
-            </div>
+             <div>
+  <label className="block text-sm font-medium mb-1 text-gray-700">
+    Category
+  </label>
 
+  <select
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 outline-none"
+  >
+    <option value="">Select Category</option>
+
+    {isLoadingg ? (
+      <option disabled>Loading...</option>
+    ) : (
+      data?.categories?.map((cat) => (
+        <option key={cat._id} value={cat._id}>
+          {cat.name}
+        </option>
+      ))
+    )}
+  </select>
+</div>
+<div>
+  <label className="block text-sm font-medium mb-1 text-gray-700">
+    Description
+  </label>
+  <textarea
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+    placeholder="Enter product description"
+    rows={4}
+    className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none resize-none"
+  />
+</div>
+
+
+
+            </div>
+        
             {/* Right side — 4 image upload boxes */}
             <div>
               
@@ -153,12 +204,25 @@ const AddProduct = () => {
 
           {/* Submit Button */}
          
-            <button
-              onClick={handleAddProduct}
-              className="bg-gradient-to-tr from-blue-950 via-black to-blue-950 text-white px-6 py-3 rounded-md font-medium transition"
-            >
-              Save Product
-            </button>
+          <button
+  onClick={handleAddProduct}
+  disabled={isLoadingadding}
+  className="bg-gradient-to-tr from-blue-950 via-black to-blue-950 
+             text-white mt-3 px-12 py-3 rounded-md font-medium
+             transition flex items-center justify-center
+              "
+>
+  <span className={`${isLoadingadding ? "invisible" : "visible"}`}>
+    Save Product
+  </span>
+
+  {isLoadingadding && (
+   
+      <span className="loader" />
+ 
+  )}
+</button>
+
           
         </div>
       </main>
