@@ -68,14 +68,30 @@ function AnimatedModel({ file, visible, onRotateStart }) {
     </group>
   );
 }
-
 function CameraControl({ step }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
+
   useFrame(() => {
+    // 1. FIX THE FOV BASED ON ASPECT RATIO
+    // If width < height (Portrait/Mobile), we need a higher FOV
+    // If width > height (Landscape/Desktop), we need a lower FOV
+    const aspect = size.width / size.height;
+    
+    if (aspect < 1) {
+      // Mobile/Vertical: Increase FOV to fit the model
+      camera.fov = 25; 
+    } else {
+      // Desktop/Horizontal: Decrease FOV to zoom in
+      camera.fov = 9;
+    }
+    camera.updateProjectionMatrix();
+
+    // 2. HANDLE ANIMATION
     if (step !== 1) return;
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
+
   return null;
 }
 
@@ -103,7 +119,7 @@ export default function Intro3DSequence() {
   return (
     <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
       <Canvas
-        dpr={typeof window !== "undefined" ? window.devicePixelRatio : 1}
+        dpr={1}
         camera={{ position: [0, 0, 6], fov: fov }}
       >
         <ambientLight intensity={0.6} />
