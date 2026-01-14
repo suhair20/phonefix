@@ -112,7 +112,7 @@ function Header() {
 
       {/* Mobile nav menu */}
      
-        <div className={`fixed top-0 left-0 w-64  rounded bg-white text-black z-40 transform transition-transform duration-500 ease-in-out ${
+        <div className={`fixed top-0 left-0 w-64     rounded bg-white text-black z-40 transform transition-transform duration-500 ease-in-out ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}>
 
