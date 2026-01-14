@@ -111,7 +111,7 @@ function CameraControl({ step }) {
     const initialZ = 6;
 
     if (step === 1) {
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 6.5, 0.03);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 7.5, 0.03);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.05, 0.03);
     } else {
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, initialZ, 0.05);
@@ -134,7 +134,7 @@ export default function Intro3DSequence() {
   return (
     <div className="w-full h-screen bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
 
-      <Canvas camera={{ position: [0, 0, 6], fov: 9 }}>
+      <Canvas camera={{ position: [0, 0, 6], fov: 30 }}>
         <ambientLight intensity={0.6} />
         <spotLight position={[40, 40, 40]} intensity={100} angle={0.8} />
 
