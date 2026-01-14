@@ -72,21 +72,25 @@ function CameraControl({ step }) {
   const { camera, size } = useThree();
 
   useFrame(() => {
-    // 1. FIX THE FOV BASED ON ASPECT RATIO
-    // If width < height (Portrait/Mobile), we need a higher FOV
-    // If width > height (Landscape/Desktop), we need a lower FOV
+    // 1. CALCULATE DYNAMIC FOV
     const aspect = size.width / size.height;
     
+    // Base FOV for desktop
+    let baseFov = 10; 
+    
     if (aspect < 1) {
-      // Mobile/Vertical: Increase FOV to fit the model
-      camera.fov = 25; 
+      // If the screen is TALL (Mobile), we increase the FOV
+      // The formula: BaseFOV / AspectRatio
+      camera.fov = baseFov / aspect;
     } else {
-      // Desktop/Horizontal: Decrease FOV to zoom in
-      camera.fov = 9;
+      // If the screen is WIDE (Desktop), we keep it tight
+      camera.fov = baseFov;
     }
+    
+    // Essential: Tell Three.js the camera math changed
     camera.updateProjectionMatrix();
 
-    // 2. HANDLE ANIMATION
+    // 2. ANIMATION LOGIC
     if (step !== 1) return;
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
@@ -140,7 +144,7 @@ export default function Intro3DSequence() {
         </Environment>
       </Canvas>
 
-      <h1 className={`absolute text-5xl md:text-7xl font-extrabold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
+      <h1 className={`absolute text-3xl md:text-7xl font-extrabold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
         <span className="intro-3d">LOBUY</span>
       </h1>
     </div>

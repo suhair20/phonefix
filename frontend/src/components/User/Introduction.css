@@ -14,7 +14,7 @@
 
 /* Extra layered shadow to look more 3D */
 .intro-3d::before {
-  content: "Lobuy";
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
