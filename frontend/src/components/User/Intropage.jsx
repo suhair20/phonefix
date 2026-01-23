@@ -5,7 +5,7 @@ import * as THREE from "three";
 import "./Introduction.css";
 
 const modelTargetSizes = {
-  headphones: 2.0,
+  headphones: 3.0,
 };
 
 function setModelOpacity(object, opacity) {
@@ -41,26 +41,35 @@ function AnimatedModel({ file, visible, onRotateStart }) {
     }
   }, [gltf, file]);
 
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    if (!ref.current || !gltf.scene) return;
+ useFrame((state, delta) => {
+  const t = state.clock.getElapsedTime();
+  if (!ref.current || !gltf.scene) return;
 
-    opacityRef.current = THREE.MathUtils.lerp(opacityRef.current, visible ? 1 : 0, 0.2);
-    setModelOpacity(gltf.scene, opacityRef.current);
+  opacityRef.current = THREE.MathUtils.lerp(
+    opacityRef.current,
+    visible ? 1 : 0,
+    0.2
+  );
+  setModelOpacity(gltf.scene, opacityRef.current);
 
-    const targetZ = visible ? 0 : 4;
-    ref.current.position.z = THREE.MathUtils.lerp(ref.current.position.z, targetZ, 0.06);
-    ref.current.position.y = Math.sin(t * 1.5) * 0.03;
+  const targetZ = visible ? 0 : 4;
+  ref.current.position.z = THREE.MathUtils.lerp(
+    ref.current.position.z,
+    targetZ,
+    0.06
+  );
+  ref.current.position.y = Math.sin(t * 1.5) * 0.03;
 
-    if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
-      rotationStartedRef.current = true;
-      onRotateStart();
-    }
+  if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
+    rotationStartedRef.current = true;
+    onRotateStart();
+  }
 
-    if (visible) {
-      ref.current.rotation.y += 0.01;
-    }
-  });
+  if (visible) {
+    ref.current.rotation.y += delta * 1.5; // ✅ FIXED
+  }
+});
+
 
   return (
     <group ref={ref}>
@@ -124,7 +133,7 @@ export default function Intro3DSequence() {
     <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
       <Canvas
         dpr={1}
-        camera={{ position: [0, 0, 6], fov: fov }}
+        camera={{ position: [0, 0, 3], fov: fov }}
       >
         <ambientLight intensity={0.6} />
         <spotLight position={[40, 40, 40]} intensity={100} angle={0.8} />
