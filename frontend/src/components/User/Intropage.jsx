@@ -58,7 +58,8 @@ function AnimatedModel({ file, visible, onRotateStart }) {
     targetZ,
     0.06
   );
-  ref.current.position.y = Math.sin(t * 1.5) * 0.03;
+  const basey=0.1
+  ref.current.position.y =basey + Math.sin(t * 1.5) * 0.03;
 
   if (visible && ref.current.position.z < 0.5 && !rotationStartedRef.current) {
     rotationStartedRef.current = true;
@@ -66,7 +67,7 @@ function AnimatedModel({ file, visible, onRotateStart }) {
   }
 
   if (visible) {
-    ref.current.rotation.y += delta * 1.5; // ✅ FIXED
+    ref.current.rotation.y += delta * 1; // ✅ FIXED
   }
 });
 
@@ -81,25 +82,14 @@ function CameraControl({ step }) {
   const { camera, size } = useThree();
 
   useFrame(() => {
-    // 1. CALCULATE DYNAMIC FOV
     const aspect = size.width / size.height;
-    
-    // Base FOV for desktop
-    let baseFov = 10; 
-    
-    if (aspect < 1) {
-      // If the screen is TALL (Mobile), we increase the FOV
-      // The formula: BaseFOV / AspectRatio
-      camera.fov = baseFov / aspect;
-    } else {
-      // If the screen is WIDE (Desktop), we keep it tight
-      camera.fov = baseFov;
-    }
-    
-    // Essential: Tell Three.js the camera math changed
+
+    // 🎯 One clean FOV system
+    const baseFov = aspect < 1 ? 9 : 8;
+    camera.fov = baseFov;
+
     camera.updateProjectionMatrix();
 
-    // 2. ANIMATION LOGIC
     if (step !== 1) return;
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
@@ -108,32 +98,29 @@ function CameraControl({ step }) {
   return null;
 }
 
+
 export default function Intro3DSequence() {
   const [step, setStep] = useState(0);
   const [showText, setShowText] = useState(false);
   
   // Calculate FOV dynamically based on screen width
-  const [fov, setFov] = useState(7);
+  
 
   useEffect(() => {
-    const handleResize = () => {
-      // If screen is narrow (mobile), use a wider FOV (30) so model isn't huge
-      // If screen is wide (desktop), use a tighter FOV (12-15)
-      setFov(window.innerWidth < 768 ? 25 : 15);
-    };
+   
 
-    handleResize(); // Set initial
-    window.addEventListener("resize", handleResize);
+ 
+    
     setTimeout(() => setStep(1), 1000);
     
-    return () => window.removeEventListener("resize", handleResize);
+ 
   }, []);
 
   return (
     <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
       <Canvas
         dpr={1}
-        camera={{ position: [0, 0, 3], fov: fov }}
+        camera={{ position: [0, 0, 3] }}
       >
         <ambientLight intensity={0.6} />
         <spotLight position={[40, 40, 40]} intensity={100} angle={0.8} />
@@ -153,7 +140,7 @@ export default function Intro3DSequence() {
         </Environment>
       </Canvas>
 
-      <h1 className={`absolute text-3xl md:text-7xl font-extrabold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
+      <h1 className={`absolute text-2xl md:text-7xl font-extrabold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
         <span className="intro-3d">LOBUY</span>
       </h1>
     </div>
