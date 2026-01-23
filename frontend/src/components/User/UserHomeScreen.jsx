@@ -37,7 +37,7 @@ console.log("API DATA:", data);
       <div></div>
 
  <h1 className="absolute text-[70px] whitespace-nowrap md:top-[40%] left-1/2 -translate-x-1/2 mt-28 -translate-y-1/2 md:text-[150px] font-extrabold text-white opacity-80 z-0 font-serif   pointer-events-none">
-        Phonefix
+        L
     </h1>
 
       <div className='md:h-[500px] rounded flex items-center justify-center overflow-hidden z-10'>

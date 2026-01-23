@@ -85,13 +85,13 @@ function CameraControl({ step }) {
     const aspect = size.width / size.height;
 
     // 🎯 One clean FOV system
-    const baseFov = aspect < 1 ? 9 : 10;
+    const baseFov = aspect < 1 ? 15 : 8;
     camera.fov = baseFov;
 
     camera.updateProjectionMatrix();
 
     if (step !== 1) return;
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.5, 0.04);
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
 
@@ -119,7 +119,7 @@ export default function Intro3DSequence() {
   return (
     <div className="w-full h-[100svh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={1}
         camera={{ position: [0, 0, 3] }}
       >
         <ambientLight intensity={0.6} />
@@ -140,7 +140,7 @@ export default function Intro3DSequence() {
         </Environment>
       </Canvas>
 
-      <h1 className={`absolute text-2xl md:text-7xl font-bold text-white  lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
+      <h1 className={`absolute text-2xl md:text-7xl font-bold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
         <span className="intro-3d">LOBUY</span>
       </h1>
     </div>
