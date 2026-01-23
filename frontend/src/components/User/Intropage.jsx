@@ -140,7 +140,7 @@ export default function Intro3DSequence() {
         </Environment>
       </Canvas>
 
-      <h1 className={`absolute text-2xl md:text-7xl font-extrabold text-white font-serif lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
+      <h1 className={`absolute text-2xl md:text-7xl font-bold text-white  lobuy-pop ${showText ? "lobuy-pop-show" : ""}`}>
         <span className="intro-3d">LOBUY</span>
       </h1>
     </div>
