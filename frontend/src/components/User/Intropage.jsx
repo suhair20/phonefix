@@ -91,7 +91,7 @@ function CameraControl({ step }) {
     camera.updateProjectionMatrix();
 
     if (step !== 1) return;
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.5, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
 
@@ -117,7 +117,7 @@ export default function Intro3DSequence() {
   }, []);
 
   return (
-    <div className="w-full h-[100vh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
+    <div className="w-full h-[100svh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
       <Canvas
         dpr={1}
         camera={{ position: [0, 0, 3] }}
