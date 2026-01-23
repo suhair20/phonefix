@@ -85,7 +85,7 @@ function CameraControl({ step }) {
     const aspect = size.width / size.height;
 
     // 🎯 One clean FOV system
-    const baseFov = aspect < 1 ? 9 : 8;
+    const baseFov = aspect < 1 ? 9 : 10;
     camera.fov = baseFov;
 
     camera.updateProjectionMatrix();
@@ -119,7 +119,7 @@ export default function Intro3DSequence() {
   return (
     <div className="w-full h-[100svh] max-h-[1000px] bg-gradient-to-tr from-blue-950 via-black to-blue-950 flex items-center justify-center relative">
       <Canvas
-        dpr={1}
+        dpr={[1, 1.5]}
         camera={{ position: [0, 0, 3] }}
       >
         <ambientLight intensity={0.6} />
