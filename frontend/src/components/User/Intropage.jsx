@@ -85,13 +85,13 @@ function CameraControl({ step }) {
     const aspect = size.width / size.height;
 
     // 🎯 One clean FOV system
-    const baseFov = aspect < 1 ? 15 : 8;
+    const baseFov = aspect < 1 ? 15 : 9;
     camera.fov = baseFov;
 
     camera.updateProjectionMatrix();
 
     if (step !== 1) return;
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 8, 0.04);
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9, 0.04);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
 
