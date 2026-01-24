@@ -92,6 +92,7 @@ function CameraControl({ step }) {
 
     if (step !== 1) return;
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, 10, 0.04);
+    
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.1, 0.04);
   });
 
