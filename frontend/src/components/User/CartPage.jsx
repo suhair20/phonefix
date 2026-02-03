@@ -4,10 +4,10 @@ import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 import {
   useGetCartQuery,
-  useAddToCartMutation,
+  
   useUpdateCartMutation,
   useRemoveFromCartMutation,
-  useCheckoutMutation,
+  
 } from "../../../slices/userSlice";
 
 function CartPage() {
@@ -15,7 +15,7 @@ function CartPage() {
   const { data: cart, isLoading, refetch } = useGetCartQuery();
   const [updateCart] = useUpdateCartMutation();
   const [removeFromCart] = useRemoveFromCartMutation();
-  const [checkout, { isLoading: checkoutLoading }] = useCheckoutMutation();
+ 
 
   const [cartTotal, setCartTotal] = useState(0);
 
@@ -81,10 +81,10 @@ function CartPage() {
 
             <button
               onClick={handlePlaceOrder}
-              disabled={checkoutLoading}
+             
               className="mt-4 w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-900 disabled:opacity-50"
             >
-              {checkoutLoading ? "Processing..." : "Proceed to Checkout"}
+             Proceed to Checkout
             </button>
           </>
         )}
