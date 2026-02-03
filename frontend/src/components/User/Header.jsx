@@ -61,11 +61,12 @@ function Header() {
     </Link>
 
 
-
+    <Link  to={'/Cart'} >
             <button className=" flex space-x-2">
       <ShoppingCart className="h-5 w-5 text-black" />
       <span className="text-sm font-medium hidden lg:inline" >Cart</span>
     </button>
+    </Link>
 
     </div>
         ):(

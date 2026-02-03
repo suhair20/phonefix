@@ -1,19 +1,34 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../../slices/CartSlice";
 import Header from './Header';
 import { useParams } from "react-router-dom";
-import { useGetProductByIdQueryQuery } from '../../../slices/userSlice';
+import { useGetProductByIdQueryQuery ,useAddToCartMutation} from '../../../slices/userSlice';
 
 
 
 function ShowProduct() {
    const { id } = useParams();
   const { data: product, isLoading } = useGetProductByIdQueryQuery(id);
+  const [addToCart, { isLoading: adding }] = useAddToCartMutation();
 
-      const [mainImage, setMainImage] = useState('');
+const [mainImage, setMainImage] = useState('');
 
+
+ const handleAddToCart = async () => {
+    try {
+      await addToCart({
+        productId: product._id,
+        quantity: 1,
+      }).unwrap();
+
+      alert("Added to cart ✅");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
    useEffect(() => {
   if (product?.images?.length > 0) {
@@ -21,7 +36,7 @@ function ShowProduct() {
   }
 }, [product]);
 
-
+ if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className='bg-[#fefffdd8] mb-20' >
@@ -61,9 +76,11 @@ function ShowProduct() {
 
       {/* Action Buttons */}
       <div className="flex gap-3 mb-6">
-        <Link  to={'/Cart'} >
-        <button className="bg-blue-950 text-white py-2 px-6 rounded hover:bg-blue-900">Add to Cart</button>
-        </Link>
+        
+        <button
+         onClick={handleAddToCart}
+         className="bg-blue-950 text-white py-2 px-6 rounded hover:bg-blue-900">{adding ? "Adding..." : "Add to Cart"}</button>
+       
       
       </div>
 

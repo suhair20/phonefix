@@ -102,7 +102,62 @@ GetProductByIdQuery:builder.query({
                url:`/api/user/productbycategory/${id}`,
                method:"GET"  
             })
-        })
+        }),
+
+        
+        checkout:builder.mutation({
+            query:(data)=>({
+                url:'/api/user/checkout',
+                method:'POST',
+                body:data
+            })
+        }),
+
+         GetCart: builder.query({
+         query: () => "/api/user/cart",
+          providesTags: ["Cart"],
+      }),
+   
+
+
+
+
+AddToCart: builder.mutation({
+  query: ({ productId, quantity }) => ({
+    url: "/api/user/cart/add",
+    method: "POST",
+    body: { productId, quantity },
+  }),
+  invalidatesTags: ["Cart"],
+}),
+
+
+
+
+
+
+UpdateCart: builder.mutation({
+  query: ({ productId, quantity }) => ({
+    url: "/api/user/cart/update",
+    method: "PUT",
+    body: { productId, quantity },
+  }),
+  invalidatesTags: ["Cart"],
+}),
+
+
+
+
+RemoveFromCart: builder.mutation({
+  query: (productId) => ({
+    url: `/api/user/cart/remove/${productId}`,
+    method: "DELETE",
+  }),
+  invalidatesTags: ["Cart"],
+}),
+
+
+
 
 
     })
@@ -120,6 +175,11 @@ export const {
     useGetLatestProductsQuery,
     useGetProductByIdQueryQuery,
     useGetCategoriesQuery,
-    useGetProductsByCategoryQuery
+    useGetProductsByCategoryQuery,
+    useCheckoutMutation,
+    useGetCartQuery,
+    useAddToCartMutation,
+    useUpdateCartMutation,
+    useRemoveFromCartMutation
 
 }=userSlice

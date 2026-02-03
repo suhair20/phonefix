@@ -1,73 +1,96 @@
-  import React from 'react'
-import { useState } from 'react';
-import CartItem from './Cartitem';
-import image2 from '../../assets/watch.png';
-import image3 from '../../assets/headset.png';
-import Header from './Header';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import CartItem from "./CartItem";
+import Header from "./Header";
+import { useNavigate } from "react-router-dom";
+import {
+  useGetCartQuery,
+  useAddToCartMutation,
+  useUpdateCartMutation,
+  useRemoveFromCartMutation,
+  useCheckoutMutation,
+} from "../../../slices/userSlice";
 
 function CartPage() {
+  const navigate = useNavigate();
+  const { data: cart, isLoading, refetch } = useGetCartQuery();
+  const [updateCart] = useUpdateCartMutation();
+  const [removeFromCart] = useRemoveFromCartMutation();
+  const [checkout, { isLoading: checkoutLoading }] = useCheckoutMutation();
 
-    const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Watch', price: 9600, image: image2, quantity: 1 },
-    { id: 2, name: 'Headset', price: 1500, image: image3, quantity: 2 },
-  ]);
+  const [cartTotal, setCartTotal] = useState(0);
 
-  const handleRemove = (id) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
+  // Update total whenever cart changes
+  useEffect(() => {
+    if (cart?.products) {
+      const total = cart.products.reduce((sum, item) => sum + item.totalPrice, 0);
+      setCartTotal(total);
+    }
+  }, [cart]);
 
-  const handleUpdateQty = (id, qty) => {
+  // Update quantity
+  const handleUpdateQty = async (productId, qty) => {
     if (qty < 1) return;
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: qty } : item
-      )
-    );
+    await updateCart({ productId, quantity: qty });
+    refetch(); // refresh cart
   };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  // Remove product
+  const handleRemove = async (productId) => {
+    await removeFromCart(productId);
+    refetch(); // refresh cart
+  };
+
+  // Place order
+  const handlePlaceOrder = async () => {
+    try {
+     
+      navigate("/Checkout");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
-<Header/>
-   
-    <div className="max-w-7xl mx-auto p-6">
-        
-      <h1 className="text-2xl  mb-6">My Shopping Bag</h1>
+      <Header />
 
-      {cartItems.length === 0 ? (
-        <p className="text-gray-500">Your cart is empty.</p>
-      ) : (
-        <>
-          <div className="space-y-4">
-            {cartItems.map((product) => (
-              <CartItem
-                key={product.id}
-                product={product}
-                onRemove={handleRemove}
-                onUpdateQty={handleUpdateQty}
-              />
-            ))}
-          </div>
+      <div className="max-w-7xl mx-auto p-6">
+        <h1 className="text-2xl mb-6">My Shopping Bag</h1>
 
-          {/* Total */}
-          <div className="flex justify-between items-center mt-6 border-t pt-4">
-            <p className="text-xl font-semibold">Total:</p>
-            <p className="text-xl font-bold">₹{total}</p>
-          </div>
-       <Link to={'/Checkout'} >
-          <button className="mt-4 w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-900">
-            Proceed to Checkout
-          </button>
-          </Link>
-        </>
-      )}
+        {isLoading ? (
+          <p>Loading cart...</p>
+        ) : !cart?.products || cart.products.length === 0 ? (
+          <p className="text-gray-500">Your cart is empty.</p>
+        ) : (
+          <>
+            <div className="space-y-4">
+              {cart.products.map((product) => (
+                <CartItem
+                  key={product.productId}
+                  product={product}
+                  onRemove={handleRemove}
+                  onUpdateQty={handleUpdateQty}
+                />
+              ))}
+            </div>
+
+            <div className="flex justify-between items-center mt-6 border-t pt-4">
+              <p className="text-xl font-semibold">Total:</p>
+              <p className="text-xl font-bold">₹{cartTotal}</p>
+            </div>
+
+            <button
+              onClick={handlePlaceOrder}
+              disabled={checkoutLoading}
+              className="mt-4 w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-900 disabled:opacity-50"
+            >
+              {checkoutLoading ? "Processing..." : "Proceed to Checkout"}
+            </button>
+          </>
+        )}
+      </div>
     </div>
-     </div>
-  )
+  );
 }
 
-export default CartPage
+export default CartPage;

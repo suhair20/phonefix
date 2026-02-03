@@ -17,6 +17,11 @@ userRoute.get('/products/latest',usercontroller.getLatestProducts)
 userRoute.get('/productbyId/:id',usercontroller.getproductById)
 userRoute.get('/categories',usercontroller.getcategories)
 userRoute.get('/productbycategory/:id',usercontroller.productbycategory)
+userRoute.post('/cart/add',UserCheckAuth.UserCheckAuth,usercontroller.addToCart)
+userRoute.get('/cart',UserCheckAuth.UserCheckAuth,usercontroller.getCart)
+userRoute.put('/cart/update',UserCheckAuth.UserCheckAuth,usercontroller.updateCart)
+userRoute.delete('/cart/remove',UserCheckAuth.UserCheckAuth,usercontroller.removeFromCart)
+
 
 
 

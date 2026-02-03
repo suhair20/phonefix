@@ -37,7 +37,7 @@ console.log("API DATA:", data);
       <div></div>
 
  <h1 className="absolute text-[70px] whitespace-nowrap md:top-[40%] left-1/2 -translate-x-1/2 mt-28 -translate-y-1/2 md:text-[150px] font-extrabold text-white opacity-80 z-0 font-serif   pointer-events-none">
-        L
+        LOBUY
     </h1>
 
       <div className='md:h-[500px] rounded flex items-center justify-center overflow-hidden z-10'>
@@ -130,10 +130,15 @@ console.log("API DATA:", data);
    <div className='pt-4 md:pt-10 px-4 md:px-36 h-auto'>
   <h1 className='text-3xl font-normal p-4 md:p-10'>POPULAR BRAND</h1>
 
-  {/* Horizontal Scroll Container for Small Screens */}//
+ 
+
+
+
+
+
+
   <div className='flex flex-col gap-4'>
 
-    {/* Wrap inside overflow container */}
     <div className='flex lg:gap-16 gap-2 overflow-x-auto xl:overflow-visible whitespace-nowrap'>
       <div className='min-w-[12rem] h-12 p-4 font-normal hover:text-blue-500 cursor-pointer flex items-center justify-center bg-slate-300 rounded-lg'>
         UBLOTE

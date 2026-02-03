@@ -5,12 +5,13 @@ const cartSchema = new mongoose.Schema({
     user: {
         type: ObjectId,
         ref: "User",
-        require: true,
+        required: true,
+        unique:true
     },
-    product: [{
+    products: [{
         productId: {
             type: ObjectId,
-            ref: "product",
+            ref: "productModel",
             required: true,
         },
         quantity: {
@@ -31,7 +32,14 @@ const cartSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "coupon",
         default: null,
-    }
-})
+    },
+    cartTotal: {
+      type: Number,
+      default: 0,
+    },
+},
+  { timestamps: true }
+
+)
 const cartModel = mongoose.model("cartModel", cartSchema)
-module.exports = cartModel
+export default  cartModel

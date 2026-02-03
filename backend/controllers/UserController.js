@@ -7,6 +7,7 @@ import Jwt from '../Services/jwt.js';
 import Address from '../models/Address.js'
 import Product from '../models/product.Model.js'
 import categories from '../models/CategoryModel.js'
+import Cart from '../models/cartModel.js'
  
 export const registration = async (req, res) => {
   try {
@@ -322,11 +323,11 @@ const Categories= await categories.find()
 export const productbycategory =async(req,res)=>{
   try {
  const { id } = req.params;
- console.log(id,"idsak");
+ 
  
 
     const cproducts = await Product.find({ category: req.params.id });
-    console.log("jiooo",cproducts);
+  
       if (!cproducts) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -338,3 +339,139 @@ export const productbycategory =async(req,res)=>{
     
   }
 } 
+
+
+////////////////////////////////////
+
+
+
+export const addToCart = async (req, res) => {
+  try {
+    console.log('hrloo');
+    
+    const userId = req.user.id // assuming you have auth middleware
+    const { productId, quantity = 1 } = req.body;
+
+    // 1️⃣ Fetch product price from DB (never trust frontend)
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    const price = product.price;
+    const totalPrice = price * quantity;
+
+    // 2️⃣ Find or create cart
+    let cart = await Cart.findOne({ user: userId });
+    if (!cart) {
+      cart = new Cart({ user: userId, products: [] });
+    }
+
+    // 3️⃣ Check if product already in cart
+    const existingProductIndex = cart.products.findIndex(p => p.productId.toString() === productId);
+    if (existingProductIndex > -1) {
+      // update quantity & totalPrice
+      cart.products[existingProductIndex].quantity += quantity;
+      cart.products[existingProductIndex].totalPrice = cart.products[existingProductIndex].quantity * price;
+    } else {
+      cart.products.push({ productId, quantity, price, totalPrice });
+    }
+
+    // 4️⃣ Recalculate cartTotal
+    cart.cartTotal = cart.products.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    await cart.save();
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+
+
+
+////////////////////// GET USER CART
+
+
+
+export const getCart = async (req, res) => {
+  try {
+    console.log('koi');
+    
+    const userId = req.user.id;
+    const cart = await Cart.findOne({ user: userId }).populate("products.productId", "name price images");
+    console.log('cart',cart);
+    
+    
+    
+    if (!cart) return res.status(404).json({ message: "Cart is empty" });
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+
+
+
+
+
+/////////////////////// UPDATE QUANTITY
+
+
+
+export const updateCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { productId, quantity } = req.body;
+
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+
+    const productIndex = cart.products.findIndex(p => p.productId.toString() === productId);
+    if (productIndex === -1) return res.status(404).json({ message: "Product not in cart" });
+
+    const product = await Product.findById(productId);
+    cart.products[productIndex].quantity = quantity;
+    cart.products[productIndex].totalPrice = quantity * product.price;
+
+    // Recalculate cartTotal
+    cart.cartTotal = cart.products.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    await cart.save();
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+
+
+
+
+///////////////////////////////// REMOVE PRODUCT FROM CART
+
+
+
+
+export const removeFromCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { productId } = req.params;
+
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+
+    cart.products = cart.products.filter(p => p.productId.toString() !== productId);
+
+    // Recalculate cartTotal
+    cart.cartTotal = cart.products.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    await cart.save();
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
