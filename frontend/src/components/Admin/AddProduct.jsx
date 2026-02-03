@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 const AddProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+
+  
   const [stock, setStock] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
