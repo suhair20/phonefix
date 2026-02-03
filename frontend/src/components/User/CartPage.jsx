@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CartItem from "./CartItem";
+import CartItem from "./Cartitem";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 import {
