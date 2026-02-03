@@ -33,6 +33,8 @@ console.log("API DATA:", data);
       <Header/>
 <div className='  bg-[#fefffdd8] '>
    
+
+   
     <div  className='  bg-gradient-to-tr from-blue-950 via-black to-blue-950'>
       <div></div>
 
