@@ -69,15 +69,15 @@ if (isLoading) {
     {products.map((product) => (
       <div
         key={product._id}
-        className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-100 border-2 flex flex-col justify-between"
+        className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-200 border-2 flex flex-col justify-between"
       >
         {/* Product page */}
         <Link to={`/product/${product._id}`}>
-          <div className="flex justify-center pt-5">
+          <div className="flex justify-center ">
             <img
               src={product?.images?.[0]?.url}
               alt={product?.name}
-              className="w-24 md:w-48 h-auto object-contain"
+              className="w-24 md:w-48 h-44 object-contain"
             />
           </div>
         </Link>
@@ -120,9 +120,7 @@ if (isLoading) {
 
        </div>
       </div>
-      <div className='pt-6' >
-   <div className="h-px bg-gray-400  w-full"></div>
-  </div>
+     
     </div>
     
 </div>
