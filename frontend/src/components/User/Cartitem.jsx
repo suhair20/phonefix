@@ -1,6 +1,6 @@
 const CartItem = ({ product, onRemove, onUpdateQty }) => {
   const productData = product.productId;
-console.log('heloo',productData);
+
 
   return (
     <div className="flex items-center gap-4 border-b py-4">

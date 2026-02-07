@@ -2,7 +2,8 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../../slices/CartSlice";
+import toast from "react-hot-toast";
+
 import Header from './Header';
 import { useParams } from "react-router-dom";
 import { useGetProductByIdQueryQuery ,useAddToCartMutation} from '../../../slices/userSlice';
@@ -24,7 +25,7 @@ const [mainImage, setMainImage] = useState('');
         quantity: 1,
       }).unwrap();
 
-      alert("Added to cart ✅");
+        toast.success(" Added to cart!");
     } catch (err) {
       console.error(err);
     }

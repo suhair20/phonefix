@@ -1,134 +1,131 @@
-import Header from './Header'
-import React from 'react'
-import { HomeIcon,ChevronRightIcon } from '@heroicons/react/24/solid';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; // Required core styles
-import 'swiper/css/autoplay';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import Header from './Header';
+import React from 'react';
+import { HomeIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import toast from "react-hot-toast";
 import { Link, useParams } from 'react-router-dom'; 
-import { useGetProductsByCategoryQuery } from '../../../slices/userSlice';
+import { useGetProductsByCategoryQuery, useAddToCartMutation } from '../../../slices/userSlice';
 
 
 
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+
+const ProductSkeleton = () => (
+  <div className="animate-pulse border border-gray-200 rounded-xl overflow-hidden">
+     <div className="aspect-square bg-gray-300" />
+     <div className="p-4 space-y-2">
+        <div className="h-4 bg-gray-300 rounded w-3/4" />
+        <div className="h-4 bg-gray-300 rounded w-1/2" />
+     </div>
+  </div>
+);
 
 
 
-import image2 from '../../assets/watch.png';
+
 
 function UserProductScreen() {
+  const { categoryId } = useParams();
+  const { data: products, isLoading } = useGetProductsByCategoryQuery(categoryId);
+  const [addToCart, { isLoading: adding }] = useAddToCartMutation();
 
-const {categoryId}=useParams()
-console.log(categoryId,'idddddddd');
-
-const { data:products, isLoading } = useGetProductsByCategoryQuery(categoryId);
-
-
-
-console.log(products);
-
-
-if (isLoading) {
-  return <div className="text-center">Loading products...</div>;
-}
-
+  const handleAddToCart = async (product) => {
+    try {
+      await addToCart({
+        productId: product._id,
+        quantity: 1,
+      }).unwrap();
+      toast.success("Added to cart!");
+    } catch (err) {
+      console.error(err);
+      toast.error("❌ Failed to add to cart");
+    }
+  };
 
 
-   return (
-    <>
-    <div className='h-screen w-screen  ' >
-      <Header/>
-       
-<div className=' h-screen bg-[#fefffdd8] '>
-    <div  className='lg:px-40 px-6  sm:px-28  '>
-      <div className='  h-[500px]  rounded ' >
-       <div>
-       
 
-          <div className='text-black cursor-pointer flex pb-7 pt-6   ' >
-            <div className='flex items-center gap-2 justify-center' >
-        <HomeIcon className="h-4 w-4 text-blue-500" />
-        <ChevronRightIcon className="h-3 w-3  " />
-        <p className='text-xs' >Home</p>
-        </div>
-       </div>
-
-      <div className='text-black pb-5 font-semibold text-3xl'>
-    Watch
-</div>
-<div className='items-center justify-center' >
-   
-</div>
-
- 
-
-<div className="w-full overflow-x-auto items-center justify-center flex touch-auto hide-scrollbar">
-  <div className="grid lg:grid-cols-5 grid-cols-2 w-max md:gap-6 gap-8 mb-16">
-
-    {products.map((product) => (
-      <div
-        key={product._id}
-        className="md:h-80 h-56 rounded w-36 md:w-56 bg-gray-200 border-2 flex flex-col justify-between"
-      >
-        {/* Product page */}
-        <Link to={`/product/${product._id}`}>
-          <div className="flex justify-center ">
-            <img
-              src={product?.images?.[0]?.url}
-              alt={product?.name}
-              className="w-24 md:w-48 h-44 object-contain"
-            />
-          </div>
-        </Link>
-
-        {/* Product info */}
-        <div className="px-3 pt-2">
-          <p className="font-semibold">{product?.name}</p>
-          <p className="text-gray-700">₹{product?.price}</p>
-        </div>
-
-        {/* Add to cart */}
-        <div className="px-3 pb-3">
-          <Link to="/cart">
-            <button className="w-full h-10 text-sm font-medium text-white bg-blue-950 border border-black rounded-lg hover:bg-blue-900">
-              Add to Cart
-            </button>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-2 mb-6 text-gray-600">
+          <Link to="/" className="hover:text-blue-600 transition-colors">
+            <HomeIcon className="h-4 w-4" />
           </Link>
-        </div>
-      </div>
-    ))}
+          <ChevronRightIcon className="h-3 w-3" />
+          <p className="text-xs font-medium uppercase tracking-wider">Products</p>
+        </nav>
 
-  </div>
-</div>
+        {/* Category Title */}
+       <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-8 capitalize">
+  {isLoading ? (
+    <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" /> // Skeleton for title
+  ) : (
+    products?.[0]?.category?.name || "Collection" 
+  )}
+</h1>
+
+        {/* Product Grid - Fully Responsive */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+          {isLoading 
+            ?(Array.from({ length: 10 }).map((_, i) => <ProductSkeleton key={i} />)) 
+            : (products?.map((product) => (
+            <div
+              key={product._id}
+              className="group bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden hover:shadow-md transition-shadow"
+            >
+              {/* Product Image Section */}
+              <Link to={`/product/${product._id}`} className="relative aspect-square overflow-hidden bg-gray-100">
+                <img
+                  src={product?.images?.[0]?.url}
+                  alt={product?.name}
+                  className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-300"
+                />
+              </Link>
+
+              {/* Product Info */}
+              <div className="p-4 flex flex-col flex-grow">
+                <h3 className="text-sm md:text-base font-semibold text-gray-800 line-clamp-1">
+                  {product?.name}
+                </h3>
+                <p className="text-lg font-bold text-blue-900 mt-1">
+                  ₹{product?.price?.toLocaleString()}
+                </p>
+
+                {/* Add to cart - Pushed to bottom */}
+                <div className="mt-auto pt-4">
+                  <button 
+                    onClick={() => handleAddToCart(product)}
+                    disabled={adding}
+                    className="w-full py-2.5 text-xs md:text-sm font-semibold text-white bg-blue-950 rounded-lg hover:bg-blue-800 active:scale-95 transition-all disabled:opacity-50"
+                  >
+                    {adding ? "Adding..." : "Add to Cart"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )))}
+          
+
+          
 
 
 
-     
 
-      
-
-      
-
-
-
-
-   
-    
   
 
 
-       </div>
-      </div>
-     
+        </div>
+
+        {/* Empty State */}
+        {products?.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg">No products found in this category.</p>
+          </div>
+        )}
+      </main>
     </div>
-    
-</div>
-      
-    
-    </div>
-    </>
-  )
+  );
 }
 
-export default UserProductScreen
+export default UserProductScreen;

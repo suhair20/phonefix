@@ -20,7 +20,7 @@ userRoute.get('/productbycategory/:id',usercontroller.productbycategory)
 userRoute.post('/cart/add',UserCheckAuth.UserCheckAuth,usercontroller.addToCart)
 userRoute.get('/cart',UserCheckAuth.UserCheckAuth,usercontroller.getCart)
 userRoute.put('/cart/update',UserCheckAuth.UserCheckAuth,usercontroller.updateCart)
-userRoute.delete('/cart/remove',UserCheckAuth.UserCheckAuth,usercontroller.removeFromCart)
+userRoute.delete('/cart/remove/:productId',UserCheckAuth.UserCheckAuth,usercontroller.removeFromCart)
 
 
 

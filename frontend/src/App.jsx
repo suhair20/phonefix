@@ -3,7 +3,7 @@ import './App.css'
 import {Outlet} from 'react-router-dom'
 import Intropage from "./components/User/Intropage"
 import { useDispatch } from "react-redux";
-
+import {Toaster}from 'react-hot-toast'
 import { useCheckAuthQuery } from "../slices/userSlice";
 import { setauthenticated,logout } from "../slices/AuthSlice";
 
@@ -45,6 +45,7 @@ const dispatch=useDispatch()
 
   return (
      <div>
+       <Toaster position="bottom-center" />
       {showIntro ? <Intropage /> : <Outlet/>}
     </div>
   )

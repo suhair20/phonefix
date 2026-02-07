@@ -325,9 +325,10 @@ export const productbycategory =async(req,res)=>{
  const { id } = req.params;
  
  
-
-    const cproducts = await Product.find({ category: req.params.id });
-  
+// Add .populate('category') to get the full category object
+   const cproducts = await Product.find({ category: req.params.id }).populate('category');
+   console.log('categoey',cproducts);
+   
       if (!cproducts) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -395,11 +396,11 @@ export const addToCart = async (req, res) => {
 
 export const getCart = async (req, res) => {
   try {
-    console.log('koi');
+    
     
     const userId = req.user.id;
     const cart = await Cart.findOne({ user: userId }).populate("products.productId", "name price images");
-    console.log('cart',cart);
+   
     
     
     
@@ -422,6 +423,8 @@ export const getCart = async (req, res) => {
 
 export const updateCart = async (req, res) => {
   try {
+   
+    
     const userId = req.user.id;
     const { productId, quantity } = req.body;
 
@@ -457,6 +460,8 @@ export const updateCart = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
   try {
+    console.log("hiiiiii");
+    
     const userId = req.user.id;
     const { productId } = req.params;
 
